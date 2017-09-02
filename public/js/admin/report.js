@@ -129,7 +129,32 @@ jQuery(document).ready(function () {
                                     '        </div>';
                             }
                         } else if (type == 'all') {
-                            
+                            var _html = '<div class="row">' +
+                                '            <div class="col-md-12">' +
+                                '                <div class="box box-default">' +
+                                '                    <div class="box-header with-border">' +
+                                '                        <h3 class="box-title">' + (value.name == "Utama" ? "Laporan Utama" : value.name) + '</h3>' +
+                                '                        <div class="box-tools pull-right">' +
+                                '                           <button type="button" class="btn btn-box-tool" data-widget="collapse">' +
+                                '                               <i class="fa fa-minus"></i>' +
+                                '                            </button>' +
+                                '                       </div>' +
+                                '                    </div>' +
+                                '                    <div class="box-body">' +
+                                '                       <table class="table table-bordered">' +
+                                '                           <tbody id="' + value.name + '">' +
+                                '                               <tr>' +
+                                '                                   <th>Nama Laporan</th>' +
+                                '                                   <th>Status Penyerahan</th>' +
+                                '                                   <th>Status Ketersediaan</th>' +
+                                '                                   <th>Action</th>' +
+                                '                               </tr>' +
+                                '                           </tbody>' +
+                                '                       </table>' +
+                                '                    </div>' +
+                                '                </div>' +
+                                '            </div>' +
+                                '        </div>';
                         }
                         $('#content').append(_html);
                     });
@@ -188,6 +213,22 @@ jQuery(document).ready(function () {
 
                             }
                         }
+                        if (type == "all") {
+                            if (value.is_reported == 0) {
+                                _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-primary btn-flat">Serahkan Berkas</button >';
+                            } else if (value.is_reported == 1 && value.is_available == 1) {
+                                _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.document_report_id + '" class="btn btn-success btn-flat">Pinjam Berkas</button >';
+                            } else if (value.is_reported == 1 && value.is_available == 0) {
+                                _action = '<button id="kembalikan" data-report="' + value.id + '" data-peminjaman-berkas="' + value.peminjaman_berkas_id + '" class="btn btn-danger btn-flat">Kembalikan Berkas</button >';
+                            }
+                            _tr = '<tr>' +
+                                '       <td>' + value.report_param_name + '</td>' +
+                                '       <td style="text-align: right;"><i class="fa ' + (value.is_reported == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
+                                '       <td style="text-align: right;"><i class="fa ' + (value.is_available == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
+                                '       <td style="text-align: right;">' + _action + '</td>' +
+                                '</tr>';
+                            $('#' + value.report_classification_name).append(_tr);
+                        }
                     });
                     $('#content').show();
                 }
@@ -207,6 +248,7 @@ jQuery(document).ready(function () {
                 if (data.status) {
                     var _data = data.data;
                     var _option = '';
+                    console.log(_data);
                     if (_data.length > 1) {
                         $('#subpaketname').empty().append('<option value="0" selected>Tampilkan Laporan Utama.</option>');
                         $.each(_data, function (index, value) {
@@ -218,24 +260,25 @@ jQuery(document).ready(function () {
                         $('#subpaketname').attr('disabled', false);
                         _isall = false;
                     } else {
-                        $('#subpaketname').empty().append('<option value="0" selected disabled>PPK tidak memiliki Sub-Paket.</option>');
+                        $('#subpaketname').empty().append('<option value="0" selected disabled>Paket ini tidak memiliki Sub-Paket.</option>');
+                        $('#subpaketname').attr('disabled', true);
                         _isall = true;
+                    }
+                    if (_isall) {
+                        makereport('all');
+                        makereport2('all');
+                    } else {
+                        if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
+                            makereport('Utama');
+                            makereport2('Utama');
+                        } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
+                            makereport('Bulanan');
+                            makereport2('Bulanan');
+                        }
                     }
                 }
             }
         });
-        if (_isall) {
-            makereport('all');
-            makereport2('all');
-        } else {
-            if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
-                makereport('Utama');
-                makereport2('Utama');
-            } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
-                makereport('Bulanan');
-                makereport2('Bulanan');
-            }
-        }
     });
 
     $('#subpaketname').change(function () {
