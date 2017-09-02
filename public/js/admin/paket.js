@@ -63,13 +63,15 @@ jQuery(document).ready(function () {
 
 
         $.each(_subpaket, function (index, value) {
-            var _formgroup = '<div class="form-group">' +
-                '                        <label for="ppk_id" class="col-md-3 control-label">Sub-Paket Title</label>' +
-                '                        <div class="col-md-9">' +
-                '                            <input disabled type="text" value="' + value.title + '" name="subpakettitle[]" class="form-control" placeholder="eg. Pengembangan Jalan">' +
-                '                        </div>' +
-                '                    </div>';
-            $('#paketmodalbody').append(_formgroup);
+            if (value.title != _data.title) {
+                var _formgroup = '<div class="form-group">' +
+                    '                        <label for="ppk_id" class="col-md-3 control-label">Sub-Paket Title</label>' +
+                    '                        <div class="col-md-9">' +
+                    '                            <input disabled type="text" value="' + value.title + '" name="subpakettitle[]" class="form-control" placeholder="eg. Pengembangan Jalan">' +
+                    '                        </div>' +
+                    '                    </div>';
+                $('#paketmodalbody').append(_formgroup);
+            }
         });
 
         $('#error').hide();

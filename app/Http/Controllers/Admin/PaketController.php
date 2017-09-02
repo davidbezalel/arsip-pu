@@ -100,12 +100,15 @@ class PaketController extends Controller
                 $data['type'] = SubPaket::$utama;
                 SubPaket::create($data);
 
-                foreach ($request['subpakettitle'] as $key => $value) {
-                    $data['title'] = $value;
-                    $data['type'] = SubPaket::$bulanan;
-                    SubPaket::create($data);
+                if (isset($request['subpakettitle'])) {
+                    foreach ($request['subpakettitle'] as $key => $value) {
+                        $data['title'] = $value;
+                        $data['type'] = SubPaket::$bulanan;
+                        SubPaket::create($data);
+                    }
                 }
-                
+
+
                 DB::commit();
                 $this->response_json->status = true;
                 $this->response_json->message = 'Paket added.';

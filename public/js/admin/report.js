@@ -99,7 +99,7 @@ jQuery(document).ready(function () {
                                     '            </div>' +
                                     '        </div>';
                             }
-                        } else {
+                        } else if (type == "Bulanan") {
                             if (value.name != "Utama") {
                                 var _html = '<div class="row">' +
                                     '            <div class="col-md-12">' +
@@ -128,6 +128,8 @@ jQuery(document).ready(function () {
                                     '            </div>' +
                                     '        </div>';
                             }
+                        } else if (type == 'all') {
+                            
                         }
                         $('#content').append(_html);
                     });
@@ -195,6 +197,7 @@ jQuery(document).ready(function () {
 
     $('#paketname').change(function () {
         var _id = $(this).val();
+        var _isall = false;
         $.ajax({
             url: '/admin/paket/get/subpaket/' + _id,
             type: 'POST',
@@ -204,8 +207,8 @@ jQuery(document).ready(function () {
                 if (data.status) {
                     var _data = data.data;
                     var _option = '';
-                    if (_data.length > 0) {
-                        $('#subpaketname').empty().append('<option value="0" selected>Silahkan pilih Sub-Paket.</option>');
+                    if (_data.length > 1) {
+                        $('#subpaketname').empty().append('<option value="0" selected>Tampilkan Laporan Utama.</option>');
                         $.each(_data, function (index, value) {
                             if (value.type == "Bulanan") {
                                 _option = '<option value="' + value.id + '"> ' + value.title + '</option>';
@@ -213,18 +216,25 @@ jQuery(document).ready(function () {
                             }
                         });
                         $('#subpaketname').attr('disabled', false);
+                        _isall = false;
                     } else {
                         $('#subpaketname').empty().append('<option value="0" selected disabled>PPK tidak memiliki Sub-Paket.</option>');
+                        _isall = true;
                     }
                 }
             }
         });
-        if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
-            makereport('Utama');
-            makereport2('Utama');
-        } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
-            makereport('Bulanan');
-            makereport2('Bulanan');
+        if (_isall) {
+            makereport('all');
+            makereport2('all');
+        } else {
+            if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
+                makereport('Utama');
+                makereport2('Utama');
+            } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
+                makereport('Bulanan');
+                makereport2('Bulanan');
+            }
         }
     });
 

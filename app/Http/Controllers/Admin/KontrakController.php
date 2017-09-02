@@ -129,120 +129,132 @@ class KontrakController extends Controller
                 /**
                  * @todo report: insert
                  *
-                 * ReportClassification['name'] = Laporan Utama; ReportParam['type'] = Utama; SubPaket['type'] = Utama
-                 * another condition
+                 * if count(subpaket) > 0: reportclassification, reportparam and subpaket must be in same type
+                 * else: reportclassification, reportparam must be in same type to combine with subpaket item
                  */
-                $data = array();
 
+                $data = array();
                 $reportclassification = ReportClassification::all();
                 $reportparam = ReportParam::all();
 
-                foreach ($reportclassification as $index => $value) {
-                    for ($i = 0; $i < count($kontrakdetails['subpaket']); $i++) {
+                if (count($subpakets) > 1) {
+                    foreach ($reportclassification as $index => $value) {
+                        for ($i = 0; $i < count($kontrakdetails['subpaket']); $i++) {
+                            foreach ($reportparam as $_index => $_value) {
+                                if (($value['name'] == ReportClassification::$utama && $_value['type'] == ReportParam::$utama && $kontrakdetails['subpaket'][$i]['type'] == SubPaket::$utama) || ($value['name'] != ReportClassification::$utama && $_value['type'] == ReportParam::$bulanan && $kontrakdetails['subpaket'][$i]['type'] == SubPaket::$bulanan)) {
+                                    $data['report_classification_id'] = $value['id'];
+                                    $data['report_param_id'] = $_value['id'];
+                                    $data['kontrakdetail_id'] = $kontrakdetails['kontrakdetail'][$i]['id'];
+                                    Report::create($data);
+                                }
+                            }
+                        }
+                    }
+                } else {
+                    foreach ($reportclassification as $index => $value) {
                         foreach ($reportparam as $_index => $_value) {
-                            if ($value['name'] == ReportClassification::$utama && $_value['type'] == ReportParam::$utama && $kontrakdetails['subpaket'][$i]['type'] == SubPaket::$utama) {
+                            if (($value['name'] == ReportClassification::$utama && $_value['type'] == ReportParam::$utama) || ($value['name'] != ReportClassification::$utama && $_value['type'] == ReportParam::$bulanan)) {
                                 $data['report_classification_id'] = $value['id'];
                                 $data['report_param_id'] = $_value['id'];
-                                $data['kontrakdetail_id'] = $kontrakdetails['kontrakdetail'][$i]['id'];
-                                Report::create($data);
-                            } else if ($value['name'] != ReportClassification::$utama && $_value['type'] == ReportParam::$bulanan && $kontrakdetails['subpaket'][$i]['type'] == SubPaket::$bulanan) {
-                                $data['report_classification_id'] = $value['id'];
-                                $data['report_param_id'] = $_value['id'];
-                                $data['kontrakdetail_id'] = $kontrakdetails['kontrakdetail'][$i]['id'];
+                                $data['kontrakdetail_id'] = $kontrakdetails['kontrakdetail'][0]['id'];
                                 Report::create($data);
                             }
                         }
                     }
+
                 }
+
 
                 DB::commit();
 
                 $this->response_json->status = true;
                 $this->response_json->message = 'Kontrak added.';
             } catch (\Exception $e) {
-                DB::rollback();
-                $this->response_json->message = $this->getServerError();
-            }
+        DB::rollback();
+        $this->response_json->message = $this->getServerError();
+    }
             return $this->__json();
         }
-    }
+}
 
-    /**
-     * @todo update specific kontrak
-     *
-     * validate request body
-     * @rules: all required
-     *
-     * kontrak: update
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function update(Request $request)
-    {
-        if ($this->isPost()) {
+/**
+ * @todo update specific kontrak
+ *
+ * validate request body
+ * @rules: all required
+ *
+ * kontrak: update
+ *
+ * @param Request $request
+ * @return \Illuminate\Http\JsonResponse
+ */
+public
+function update(Request $request)
+{
+    if ($this->isPost()) {
 
-            $kontrakModel = new PPK();
+        $kontrakModel = new PPK();
 
-            /**
-             * @todo validate request
-             */
-            $rules = array(
-                'kontrakname' => 'required',
-                'companyname' => 'required',
-                'companyleader' => 'required'
-            );
+        /**
+         * @todo validate request
+         */
+        $rules = array(
+            'kontrakname' => 'required',
+            'companyname' => 'required',
+            'companyleader' => 'required'
+        );
 
-            if (null !== $this->validate_v2($request, $rules)) {
-                $this->response_json->message = $this->validate_V2($request, $rules);
-                return $this->__json();
-            }
-
-            $where = array(
-                ['kontrakname', '=', $request['kontrakname']],
-                ['id', '<>', $request['id']]
-            );
-            if ($kontrakModel->find_v2($where)) {
-                $this->response_json->message = 'PPK name already taken';
-                return $this->__json();
-            }
-
-            /**
-             * @todo kontrak: update
-             */
-            try {
-                $kontrak = $kontrakModel->find($request['id']);
-                foreach ($kontrakModel->getFillable() as $field) {
-                    $kontrak[$field] = $request[$field];
-                }
-
-                $kontrak->update();
-                $this->response_json->status = true;
-                $this->response_json->message = 'PPK updated.';
-            } catch (\Exception $e) {
-                $this->response_json->message = $this->getServerError();
-            }
+        if (null !== $this->validate_v2($request, $rules)) {
+            $this->response_json->message = $this->validate_V2($request, $rules);
             return $this->__json();
         }
-    }
 
-    /**
-     * @todo delete specific kontrak
-     *
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function delete(Request $request)
-    {
-        if ($this->isPost()) {
-            try {
-                PPK::find($request['id'])->delete();
-                $this->response_json->status = true;
-                $this->response_json->message = 'PPK deleted.';
-            } catch (\Exception $e) {
-                $this->response_json->message = $this->getServerError();
-            }
+        $where = array(
+            ['kontrakname', '=', $request['kontrakname']],
+            ['id', '<>', $request['id']]
+        );
+        if ($kontrakModel->find_v2($where)) {
+            $this->response_json->message = 'PPK name already taken';
             return $this->__json();
         }
+
+        /**
+         * @todo kontrak: update
+         */
+        try {
+            $kontrak = $kontrakModel->find($request['id']);
+            foreach ($kontrakModel->getFillable() as $field) {
+                $kontrak[$field] = $request[$field];
+            }
+
+            $kontrak->update();
+            $this->response_json->status = true;
+            $this->response_json->message = 'PPK updated.';
+        } catch (\Exception $e) {
+            $this->response_json->message = $this->getServerError();
+        }
+        return $this->__json();
     }
+}
+
+/**
+ * @todo delete specific kontrak
+ *
+ * @param Request $request
+ * @return \Illuminate\Http\JsonResponse
+ */
+public
+function delete(Request $request)
+{
+    if ($this->isPost()) {
+        try {
+            PPK::find($request['id'])->delete();
+            $this->response_json->status = true;
+            $this->response_json->message = 'PPK deleted.';
+        } catch (\Exception $e) {
+            $this->response_json->message = $this->getServerError();
+        }
+        return $this->__json();
+    }
+}
 }
