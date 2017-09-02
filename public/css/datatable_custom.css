@@ -1,0 +1,94 @@
+/* set font */
+table.dataTable {
+    font-family: 'Trebuchet MS', Arial, 'Sans-Serif';
+    font-size: 12px;
+}
+
+/* set class left in head */
+table.dataTable > thead > tr > th.left {
+    text-align: left !important;
+}
+
+/* set class for number in head */
+table.dataTable > thead > tr > th.no {
+    padding: 0 15px !important;
+    width: 15px !important;
+    vertical-align: middle;
+}
+
+table.dataTable > thead > tr > th {
+    text-align: center;
+    padding: 10px 0 !important;
+    background: #3c8dbc;
+    color: #FFF;
+}
+
+/* order icon vertical align in absolute position */
+table.dataTable thead .sorting:after, table.dataTable thead .sorting_asc:after, table.dataTable thead .sorting_desc:after {
+    top: 50%;
+    right: 8px;
+    margin-top: -0.5em;
+    text-align: center;
+    position: absolute;
+    display: block;
+    font-family: 'Glyphicons Halflings', Sans-Serif;
+    opacity: 0.5;
+}
+
+/* body number */
+table.dataTable > tbody > tr > td.no {
+    text-align: center;
+}
+
+/* body text right */
+table.dataTable > tbody > tr > td.right {
+    text-align: right;
+}
+
+/* action */
+table.dataTable > tbody > tr > td a.action,
+a.general-action {
+    display: inline-block;
+    margin: 0 5px;
+}
+
+table.dataTable > tbody > tr > td a.action .fa {
+    font-size: 20px;
+}
+
+table.dataTable > tbody > tr > td a.action-danger .fa {
+    color: #d83737;
+}
+
+.pagination > li > a:hover {
+    background: #599fb9;
+    cursor: pointer;
+    color: #FFF;
+    border: 1px solid #599fb9;
+}
+
+.image-datatable {
+    width: 70px;
+    height: auto;
+    max-height: 80px;
+    padding: 3px 0;
+    margin: 0 auto;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    padding: 0 !important;
+}
+
+/* divide 2 span in a row to left and right */
+.spandivided {
+    display: block;
+    float: left;
+}
+
+.spandivided-right {
+    float: right;
+}
+
+.spandivided-left {
+    float: left;
+}
