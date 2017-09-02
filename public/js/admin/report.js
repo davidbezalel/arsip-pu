@@ -37,6 +37,7 @@ jQuery(document).ready(function () {
         $.ajax({
             url: '/admin/paket/get/ppk/' + _id,
             type: 'POST',
+            cache: false,
             headers: {'X-CSRF-TOKEN': token},
             success: function (data) {
                 if (data.status) {
@@ -62,6 +63,7 @@ jQuery(document).ready(function () {
         $.ajax({
             url: '/admin/reportclassification/get',
             type: 'POST',
+            cache: false,
             headers: {'X-CSRF-TOKEN': token},
             success: function (data) {
                 if (data.status) {
@@ -156,7 +158,7 @@ jQuery(document).ready(function () {
                             } else if (value.is_reported == 1 && value.is_available == 1) {
                                 _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.document_report_id + '" class="btn btn-success btn-flat">Pinjam Berkas</button >';
                             } else if (value.is_reported == 1 && value.is_available == 0) {
-                                _action = '<button id="kembalikan" data-report="' + value.id + '" date-peminjaman-berkas="' + value.peminjaman_berkas_id + '" class="btn btn-danger btn-flat">Kembalikan Berkas</button >';
+                                _action = '<button id="kembalikan" data-report="' + value.id + '" data-peminjaman-berkas="' + value.peminjaman_berkas_id + '" class="btn btn-danger btn-flat">Kembalikan Berkas</button >';
                             }
                             _tr = '<tr>' +
                                 '       <td>' + value.report_param_name + '</td>' +
@@ -172,7 +174,7 @@ jQuery(document).ready(function () {
                                 } else if (value.is_reported == 1 && value.is_available == 1) {
                                     _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.document_report_id + '" class="btn btn-success btn-flat">Pinjam Berkas</button >';
                                 } else if (value.is_reported == 1 && value.is_available == 0) {
-                                    _action = '<button id="kembalikan" data-report="' + value.id + '" date-peminjaman-berkas="' + value.peminjaman_berkas_id + '" class="btn btn-danger btn-flat">Kembalikan Berkas</button >';
+                                    _action = '<button id="kembalikan" data-report="' + value.id + '" data-peminjaman-berkas="' + value.peminjaman_berkas_id + '" class="btn btn-danger btn-flat">Kembalikan Berkas</button >';
                                 }
                                 _tr = '<tr>' +
                                     '       <td>' + value.report_param_name + '</td>' +
@@ -196,13 +198,14 @@ jQuery(document).ready(function () {
         $.ajax({
             url: '/admin/paket/get/subpaket/' + _id,
             type: 'POST',
+            cache: false,
             headers: {'X-CSRF-TOKEN': token},
             success: function (data) {
                 if (data.status) {
                     var _data = data.data;
                     var _option = '';
                     if (_data.length > 0) {
-                        $('#subpaketname').empty().append('<option value="0" selected disabled>Silahkan pilih Sub-Paket.</option>');
+                        $('#subpaketname').empty().append('<option value="0" selected>Silahkan pilih Sub-Paket.</option>');
                         $.each(_data, function (index, value) {
                             if (value.type == "Bulanan") {
                                 _option = '<option value="' + value.id + '"> ' + value.title + '</option>';
@@ -216,13 +219,23 @@ jQuery(document).ready(function () {
                 }
             }
         });
-        makereport('Utama');
-        makereport2('Utama');
+        if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
+            makereport('Utama');
+            makereport2('Utama');
+        } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
+            makereport('Bulanan');
+            makereport2('Bulanan');
+        }
     });
 
     $('#subpaketname').change(function () {
-        makereport('Bulanan');
-        makereport2('Bulanan');
+        if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
+            makereport('Utama');
+            makereport2('Utama');
+        } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
+            makereport('Bulanan');
+            makereport2('Bulanan');
+        }
     });
 
 
@@ -236,8 +249,13 @@ jQuery(document).ready(function () {
                 headers: {'X-CSRF-TOKEN': token},
                 success: function (data) {
                     if (data.status) {
-                        makereport();
-                        makereport2();
+                        if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
+                            makereport('Utama');
+                            makereport2('Utama');
+                        } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
+                            makereport('Bulanan');
+                            makereport2('Bulanan');
+                        }
                     }
                 }
             });
@@ -254,8 +272,13 @@ jQuery(document).ready(function () {
                 headers: {'X-CSRF-TOKEN': token},
                 success: function (data) {
                     if (data.status) {
-                        makereport();
-                        makereport2();
+                        if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
+                            makereport('Utama');
+                            makereport2('Utama');
+                        } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
+                            makereport('Bulanan');
+                            makereport2('Bulanan');
+                        }
                     }
                 }
             });
@@ -272,8 +295,13 @@ jQuery(document).ready(function () {
                 headers: {'X-CSRF-TOKEN': token},
                 success: function (data) {
                     if (data.status) {
-                        makereport();
-                        makereport2();
+                        if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
+                            makereport('Utama');
+                            makereport2('Utama');
+                        } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
+                            makereport('Bulanan');
+                            makereport2('Bulanan');
+                        }
                     }
                 }
             });
