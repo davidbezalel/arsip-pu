@@ -9,5 +9,5 @@ class PPK extends Model
 {
     public $timestamps = false;
     protected $table = 'ppk';
-    protected $fillable = ['companyname', 'ppkname', 'companyleader'];
+    protected $fillable = ['ppkname', 'companyleader'];
 }

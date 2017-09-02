@@ -45,12 +45,14 @@ class ReportController extends Controller
     {
         if ($this->isPost()) {
             $reportmodel = new Report();
-            $reports = $reportmodel->join('kontrak', 'report.kontrak_id', '=', 'kontrak.id')
+            $reports = $reportmodel->join('kontrakdetail', 'report.kontrakdetail_id', '=', 'kontrakdetail.id')
+                ->join('subpaket', 'kontrakdetail.subpaket_id', '=', 'subpaket.id')
+                ->join('kontrak', 'kontrakdetail.kontrak_id', '=', 'kontrak.id')
                 ->join('report_classification', 'report.report_classification_id', '=', 'report_classification.id')
                 ->join('report_param', 'report.report_param_id', '=', 'report_param.id')
                 ->leftjoin('document_report', 'document_report.report_id', '=', 'report.id')
                 ->leftjoin('peminjaman_berkas', 'peminjaman_berkas.document_report_id', '=', 'document_report.id')
-                ->where('ppk_id', '=', $request['ppk_id'])->where('paket_id', '=', $request['paket_id'])->get(['report.*', 'report_classification.name as report_classification_name', 'report_param.name as report_param_name', 'document_report.id as document_report_id', 'peminjaman_berkas.id as peminjaman_berkas_id']);
+                ->where('ppk_id', '=', $request['ppk_id'])->where('kontrak.paket_id', '=', $request['paket_id'])->get(['report.*', 'report_classification.name as report_classification_name', 'report_param.name as report_param_name', 'document_report.id as document_report_id', 'peminjaman_berkas.id as peminjaman_berkas_id', 'subpaket.id as subpaketid']);
             $this->response_json->status = true;
             $this->response_json->data = $reports;
             return $this->__json();
@@ -119,7 +121,7 @@ class ReportController extends Controller
                  * @todo peminjaman_berkas: insert
                  */
                 $data = array();
-                $data['peminjaman_berkas_id'] = (int)$request['peminjaman_berkas_id'];
+                $data['document_report_id'] = $request['document_report_id'];
                 $data['handled_by'] = Auth::user()->id;
                 PeminjamanBerkas::create($data);
 
@@ -161,7 +163,7 @@ class ReportController extends Controller
                  * @todo pengembalian_berkas: insert
                  */
                 $data = array();
-                $data['document_report_id'] = (int)$request['document_report_id'];
+                $data['peminjaman_berkas_id'] = $request['peminjaman_berkas_id'];
                 $data['handled_by'] = Auth::user()->id;
                 PengembalianBerkas::create($data);
 

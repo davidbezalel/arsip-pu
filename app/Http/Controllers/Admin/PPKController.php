@@ -25,10 +25,9 @@ class PPKController extends Controller
         if ($this->isPost()) {
             $ppkModel = new PPK();
 
-            $columns = ['no', 'ppkname', 'companyname', 'companyleader', 'created_at'];
+            $columns = ['no', 'ppkname', 'companyleader', 'created_at'];
             $where = array(
-                ['companyname', 'LIKE', '%' . $request['search']['value'] . '%'],
-                ['ppkname', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
+                ['ppkname', 'LIKE', '%' . $request['search']['value'] . '%'],
                 ['companyleader', 'LIKE', '%' . $request['search']['value'] . '%', 'OR']
             );
             $ppks = $ppkModel->find_v2($where, true, ['*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir']);
@@ -76,7 +75,6 @@ class PPKController extends Controller
              */
             $rules = array(
                 'ppkname' => 'required|unique:ppk',
-                'companyname' => 'required',
                 'companyleader' => 'required|unique:ppk'
             );
 
@@ -122,7 +120,6 @@ class PPKController extends Controller
              */
             $rules = array(
                 'ppkname' => 'required',
-                'companyname' => 'required',
                 'companyleader' => 'required'
             );
 

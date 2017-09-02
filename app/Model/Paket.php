@@ -9,5 +9,5 @@ class Paket extends Model
 {
     public $timestamps = false;
     protected $table = 'paket';
-    protected $fillable = ['title', 'year'];
+    protected $fillable = ['title', 'year', 'companyprovider'];
 }

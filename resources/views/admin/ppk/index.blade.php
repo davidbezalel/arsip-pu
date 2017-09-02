@@ -14,7 +14,6 @@
                             <tr>
                                 <th class="no">#</th>
                                 <th>PPK Name</th>
-                                <th>Company Name</th>
                                 <th>Company Leader</th>
                                 <th>Date Created</th>
                                 <th>Action</th>
@@ -42,13 +41,6 @@
                         <label for="ppkname" class="col-md-3 control-label">PPK Name</label>
                         <div class="col-md-9">
                             <input type="text" name="ppkname" class="form-control" placeholder="eg. PPK01">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label for="companyname" class="col-md-3 control-label">Company Name</label>
-                        <div class="col-md-9">
-                            <input type="text" name="companyname" class="form-control" placeholder="eg. PT. ABC">
                         </div>
                     </div>
 

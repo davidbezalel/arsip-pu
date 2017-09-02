@@ -121,8 +121,6 @@ jQuery(document).ready(function () {
         }, {
             data: 'ppkname'
         }, {
-            data: 'companyname'
-        }, {
             data: 'companyleader',
         }, {
             data: 'created_at',
@@ -138,7 +136,7 @@ jQuery(document).ready(function () {
                     // "<a href='' data-id='" + data.id + "' class='action action-danger delete'><i class='fa fa-trash-o'></i></a>";
             }
         }],
-        order: [4, 'DESC']
+        order: [3, 'DESC']
     });
 
     table.draw();

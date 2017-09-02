@@ -44,6 +44,7 @@ Route::group(['guard' => 'admin'], function () {
     Route::post('/admin/paket/delete', 'Admin\PaketController@delete');
     Route::post('/admin/paket/get', 'Admin\PaketController@get');
     Route::post('/admin/paket/get/ppk/{id}', 'Admin\PaketController@getbyppk');
+    Route::post('/admin/paket/get/subpaket/{id}', 'Admin\PaketController@getsubpaket');
 
     /**
      * @var kontrak

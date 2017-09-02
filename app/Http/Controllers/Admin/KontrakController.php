@@ -9,9 +9,11 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Model\Kontrak;
+use App\Model\KontrakDetail;
 use App\Model\Report;
 use App\Model\ReportClassification;
 use App\Model\ReportParam;
+use App\Model\SubPaket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -32,7 +34,6 @@ class KontrakController extends Controller
             $columns = ['no', 'ppk_id', 'paket_id', 'kontrak.created_at'];
             $where = array(
                 ['ppk.ppkname', 'LIKE', '%' . $request['search']['value'] . '%'],
-                ['ppk.companyname', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
                 ['ppk.companyleader', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
                 ['paket.title', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
             );
@@ -72,7 +73,6 @@ class KontrakController extends Controller
      * @rules: all required
      *
      * kontrak: insert
-
      * get all classification
      * get all param depend on classification
      * report: insert
@@ -101,34 +101,56 @@ class KontrakController extends Controller
 
             /**
              * @todo kontrak: insert
+             *
+             * kontrak: insert
+             * for each subpaket=> kontrakdetail: insert;
+             * for each reportclassification, for each kontrakdetail, for each reportparam => report: insert
+             * if subpaket.count = 1, report per month also made for kontrakdetail utama
              */
             try {
                 DB::beginTransaction();
 
                 $data = $request->all();
                 $kontrak = $kontrakModel::create($data);
-
-                $data = array(
-                    'kontrak_id'=> $kontrak['id'],
+                $kontrakdetails = array(
+                    'kontrakdetail' => [],
+                    'subpaket' => []
                 );
+
+
+                $subpakets = SubPaket::where('paket_id', $kontrak['paket_id'])->get();
+                $data['kontrak_id'] = $kontrak['id'];
+                foreach ($subpakets as $index => $subpaket) {
+                    $data['subpaket_id'] = $subpaket['id'];
+                    $kontrakdetails['kontrakdetail'][] = KontrakDetail::create($data);
+                    $kontrakdetails['subpaket'][] = $subpaket;
+                }
+
+                /**
+                 * @todo report: insert
+                 *
+                 * ReportClassification['name'] = Laporan Utama; ReportParam['type'] = Utama; SubPaket['type'] = Utama
+                 * another condition
+                 */
+                $data = array();
 
                 $reportclassification = ReportClassification::all();
                 $reportparam = ReportParam::all();
 
                 foreach ($reportclassification as $index => $value) {
-                    foreach ($reportparam as $_index => $_value) {
-                        $valid = false;
-                        if ($value['name'] == ReportClassification::$pokok && $_value['type'] == ReportParam::$pokok) {
-                            $data['report_classification_id'] = $value['id'];
-                            $data['report_param_id'] = $_value['id'];
-                            $valid = true;
-                        } else if ($value['name'] != ReportClassification::$pokok && $_value['type'] == ReportParam::$bulanan) {
-                            $data['report_classification_id'] = $value['id'];
-                            $data['report_param_id'] = $_value['id'];
-                            $valid = true;
-                        }
-                        if ($valid) {
-                            Report::create($data);
+                    for ($i = 0; $i < count($kontrakdetails['subpaket']); $i++) {
+                        foreach ($reportparam as $_index => $_value) {
+                            if ($value['name'] == ReportClassification::$utama && $_value['type'] == ReportParam::$utama && $kontrakdetails['subpaket'][$i]['type'] == SubPaket::$utama) {
+                                $data['report_classification_id'] = $value['id'];
+                                $data['report_param_id'] = $_value['id'];
+                                $data['kontrakdetail_id'] = $kontrakdetails['kontrakdetail'][$i]['id'];
+                                Report::create($data);
+                            } else if ($value['name'] != ReportClassification::$utama && $_value['type'] == ReportParam::$bulanan && $kontrakdetails['subpaket'][$i]['type'] == SubPaket::$bulanan) {
+                                $data['report_classification_id'] = $value['id'];
+                                $data['report_param_id'] = $_value['id'];
+                                $data['kontrakdetail_id'] = $kontrakdetails['kontrakdetail'][$i]['id'];
+                                Report::create($data);
+                            }
                         }
                     }
                 }

@@ -29,6 +29,14 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="form-group">
+                                <label for="paket_id" class="col-md-2 control-label">Sub - Paket</label>
+                                <div class="col-md-10">
+                                    <select id="subpaketname" class="form-control js-example-basic-single" name="paket_id" disabled="true">
+                                    </select>
+                                </div>
+                            </div>
                         </form>
                     </div>
                 </div>

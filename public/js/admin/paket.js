@@ -15,9 +15,11 @@ jQuery(document).ready(function () {
     $('#add').click(function (event) {
         event.preventDefault();
         $('#paket-form')[0].reset();
+        $('#paketmodalbody').empty();
         $('#error').hide();
         $('#update-btn').hide();
         $('#add-btn').show();
+        $('#addsubpaket').show();
         $('#paket-modal').modal();
     });
 
@@ -40,6 +42,7 @@ jQuery(document).ready(function () {
                     successnotification(data.message);
                     table.draw();
                     $('#paket-form')[0].reset();
+                    $('#paketmodalbody').empty();
                 }
             }
 
@@ -48,10 +51,26 @@ jQuery(document).ready(function () {
 
     $(document).on('click', '.update', function (event) {
         event.preventDefault();
+        $('#paketmodalbody').empty();
         var _data = JSON.parse($(this).attr('data-data'));
+        var _subpaket = JSON.parse($(this).attr('data-subpaket'));
         $('input[name=title]').val(_data.title);
         $('input[name=year]').val(_data.year);
+        $('input[name=companyprovider]').val(_data.companyprovider);
         $('#update-btn').attr('data-id', _data.id);
+        $('#addsubpaket').hide();
+
+
+
+        $.each(_subpaket, function (index, value) {
+            var _formgroup = '<div class="form-group">' +
+                '                        <label for="ppk_id" class="col-md-3 control-label">Sub-Paket Title</label>' +
+                '                        <div class="col-md-9">' +
+                '                            <input disabled type="text" value="' + value.title + '" name="subpakettitle[]" class="form-control" placeholder="eg. Pengembangan Jalan">' +
+                '                        </div>' +
+                '                    </div>';
+            $('#paketmodalbody').append(_formgroup);
+        });
 
         $('#error').hide();
         $('#update-btn').show();
@@ -79,6 +98,7 @@ jQuery(document).ready(function () {
                     successnotification(data.message);
                     table.draw();
                     $('#paket-form')[0].reset();
+                    $('#paketmodalbody').empty();
                 }
             }
         });
@@ -102,6 +122,18 @@ jQuery(document).ready(function () {
                 }
             });
         }
+    });
+
+    $('#addsubpaket').click(function (event) {
+        event.preventDefault();
+        var _formgroup = '<div class="form-group">' +
+            '                        <label for="ppk_id" class="col-md-3 control-label">Sub-Paket Title</label>' +
+            '                        <div class="col-md-9">' +
+            '                            <input type="text" name="subpakettitle[]" class="form-control" placeholder="eg. Pengembangan Jalan">' +
+            '                        </div>' +
+            '                    </div>';
+        $('#paketmodalbody').append(_formgroup);
+
     });
 
     var table = $('#paket-table').DataTable({
@@ -131,8 +163,8 @@ jQuery(document).ready(function () {
             orderable: false,
             className: 'right',
             render: function (data) {
-                return "<a href='' data-data='" + JSON.stringify(data) + "' class='action update'><i class='fa fa-pencil-square-o'></i></a>";
-                    // "<a href='' data-id='" + data.id + "' class='action action-danger delete'><i class='fa fa-trash-o'></i></a>";
+                return "<a href='' data-data='" + JSON.stringify(data) + "' data-subpaket='" + JSON.stringify(data.subpaket) + "' class='action update'><i class='fa fa-pencil-square-o'></i></a>";
+                // "<a href='' data-id='" + data.id + "' class='action action-danger delete'><i class='fa fa-trash-o'></i></a>";
             }
         }],
         order: [3, 'DESC']
