@@ -14,6 +14,7 @@ jQuery(document).ready(function () {
 
     $('#add').click(function (event) {
         event.preventDefault();
+        $('#yearsofwork').hide();
         $('#paket-form')[0].reset();
         $('#paketmodalbody').empty();
         $('#error').hide();
@@ -136,6 +137,14 @@ jQuery(document).ready(function () {
             '                    </div>';
         $('#paketmodalbody').append(_formgroup);
 
+    });
+
+    $('input[name=ismultiyears]').click(function () {
+        if ($('input[name=ismultiyears]:checked').length > 0) {
+            $('#yearsofwork').show();
+        } else {
+            $('#yearsofwork').hide();
+        }
     });
 
     var table = $('#paket-table').DataTable({

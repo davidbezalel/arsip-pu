@@ -45,22 +45,26 @@
                     </div>
 
                     <div class="form-group">
-                        <label for="ppk_id" class="col-md-3 control-label">Penyedia Jasa</label>
+                        <label for="startyear" class="col-md-3 control-label">TA</label>
                         <div class="col-md-9">
-                            <input type="text" name="companyprovider" class="form-control" placeholder="eg. Pengembangan Jalan">
+                            <input type="text" name="startyear" class="form-control" placeholder="eg. 2017">
+                        </div>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="ismultiyears" class="col-md-3 control-label">Multi Years?</label>
+                        <div class="col-md-2">
+                            <input type="checkbox" name="ismultiyears" id="ismultiyears" class="checkboxmodal">
+                        </div>
+                        <div class="col-md-5 pull-right">
+                            <input type="text" name="yearsofwork" id="yearsofwork" style="display: none;" class="form-control" placeholder="Jumlah tahun pelaksanaan">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="year" class="col-md-3 control-label">TA</label>
-                        <div class="col-md-9">
-                            <input type="text" name="year" class="form-control" placeholder="eg. 2017">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <div class="col-md-offset-3">
-                            <button id="addsubpaket" class="btn btn-flat btn-success">Add Sub Paket</button>
+                        <div class="pull-right">
+                            <button id="addsubpaket" class="btn btn-flat btn-success" style="margin-right: 15px;">Add Sub Paket</button>
                         </div>
                     </div>
 

@@ -10,8 +10,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Model\Kontrak;
 use App\Model\Paket;
+use App\Model\PaketYear;
+use App\Model\ReportType;
 use App\Model\SubPaket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class PaketController extends Controller
@@ -64,6 +67,8 @@ class PaketController extends Controller
      * @rules: all required
      *
      * paket: insert
+     * subpaket: insert
+     * paketyear: insert
      *
      * @param $request
      * @return \Illuminate\Http\JsonResponse
@@ -78,7 +83,7 @@ class PaketController extends Controller
              */
             $rules = array(
                 'title'=> 'required',
-                'year'=> 'required'
+                'startyear'=> 'required',
             );
 
             if (null !== $this->validate_v2($request, $rules)) {
@@ -92,20 +97,38 @@ class PaketController extends Controller
             try {
                 DB::beginTransaction();
                 $data = $request->all();
+                $data['ismultiyears'] = isset($request['ismultiyears']) ? 1 : 0;
+                $data['yearsofwork'] = ($request['yearsofwork'] == "" || $data['ismultiyears'] == 0) ? 1 : $request['yearsofwork'];
+                $data['admin_id'] = Auth::user()->id;
                 $paket = $paketModel::create($data);
 
+                /**
+                 * @todo subpaket: insert
+                 *
+                 * we will create 2 subpaket depend on reporttype ['Utama', 'MC']
+                 */
                 $data = array();
                 $data['paket_id'] = $paket['id'];
                 $data['title'] = $paket['title'];
-                $data['type'] = SubPaket::$utama;
+                $data['reporttype_id'] = ReportType::where('title', '=', 'Utama')->first()['id'];
                 SubPaket::create($data);
 
                 if (isset($request['subpakettitle'])) {
+                    $data['reporttype_id'] = ReportType::where('title', '=', 'MC')->first()['id'];
                     foreach ($request['subpakettitle'] as $key => $value) {
                         $data['title'] = $value;
-                        $data['type'] = SubPaket::$bulanan;
                         SubPaket::create($data);
                     }
+                }
+
+                /**
+                 * @todo paketyear
+                 */
+                $data = array();
+                $data['paket_id'] = $paket['id'];
+                for ($i = 0; $i < $paket['yearsofwork']; $i++) {
+                    $data['year'] = $request['startyear'] + $i;
+                    PaketYear::create($data);
                 }
 
 
@@ -114,7 +137,7 @@ class PaketController extends Controller
                 $this->response_json->message = 'Paket added.';
             } catch (\Exception $e) {
                 DB::rollback();
-                $this->response_json->message = $this->getServerError();
+                $this->response_json->message = $e->getMessage();
             }
             return $this->__json();
         }
