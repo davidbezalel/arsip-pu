@@ -11,7 +11,7 @@ class ReportClassification extends Model
     /**
      * @var String type
      */
-    public static $pokok = 'Utama';
+    public static $utama = 'Utama';
 
     public $timestamps = false;
     protected $table = 'report_classification';

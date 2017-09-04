@@ -10,7 +10,9 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Model\Kontrak;
 use App\Model\Paket;
+use App\Model\SubPaket;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PaketController extends Controller
 {
@@ -25,6 +27,7 @@ class PaketController extends Controller
     {
         if ($this->isPost()) {
             $paketModel = new Paket();
+            $subpaketmodel = new SubPaket();
 
             $columns = ['no', 'title', 'year', 'created_at'];
             $where = array(
@@ -34,6 +37,7 @@ class PaketController extends Controller
             $number = intval($request['start']) + 1;
             foreach ($pakets as &$item) {
                 $item['no'] = $number;
+                $item['subpaket'] = SubPaket::where('paket_id', $item['id'])->get();
                 $number++;
             }
             $response_json = array();
@@ -67,7 +71,6 @@ class PaketController extends Controller
     public function add(Request $request)
     {
         if ($this->isPost()) {
-
             $paketModel = new Paket();
 
             /**
@@ -87,11 +90,30 @@ class PaketController extends Controller
              * @todo paket: insert
              */
             try {
+                DB::beginTransaction();
                 $data = $request->all();
-                $paketModel::create($data);
+                $paket = $paketModel::create($data);
+
+                $data = array();
+                $data['paket_id'] = $paket['id'];
+                $data['title'] = $paket['title'];
+                $data['type'] = SubPaket::$utama;
+                SubPaket::create($data);
+
+                if (isset($request['subpakettitle'])) {
+                    foreach ($request['subpakettitle'] as $key => $value) {
+                        $data['title'] = $value;
+                        $data['type'] = SubPaket::$bulanan;
+                        SubPaket::create($data);
+                    }
+                }
+
+
+                DB::commit();
                 $this->response_json->status = true;
                 $this->response_json->message = 'Paket added.';
             } catch (\Exception $e) {
+                DB::rollback();
                 $this->response_json->message = $this->getServerError();
             }
             return $this->__json();
@@ -197,6 +219,15 @@ class PaketController extends Controller
                 $value['paket'] = $paket;
             }
             $this->response_json->data = $kontraks;
+            $this->response_json->status = true;
+            return $this->__json();
+        }
+    }
+
+    public function getsubpaket($paket_id) {
+        if ($this->isPost()) {
+            $subpakets = SubPaket::where('paket_id', '=', $paket_id)->get();
+            $this->response_json->data = $subpakets;
             $this->response_json->status = true;
             return $this->__json();
         }

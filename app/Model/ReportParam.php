@@ -11,7 +11,7 @@ class ReportParam extends Model
     /**
      * @var String type
      */
-    public static $pokok = "POKOK";
+    public static $utama = "Utama";
     public static $bulanan = 'BULANAN';
 
     public $timestamps = false;

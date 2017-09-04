@@ -1,5 +1,6 @@
 jQuery(document).ready(function () {
     var token = $('meta[name=csrf-token]').attr('content');
+    var selectedyear = 0;
 
     var successnotification = function (message) {
         $('#successmessage').empty().append(message);
@@ -11,6 +12,10 @@ jQuery(document).ready(function () {
             $(this).modal('hide');
         });
     };
+
+    var drawtable = function () {
+        $('#ppk-table').data('year', {year: selectedyear});
+    }
 
     $('#add').click(function (event) {
         event.preventDefault();
@@ -49,9 +54,9 @@ jQuery(document).ready(function () {
     $(document).on('click', '.update', function (event) {
         event.preventDefault();
         var _data = JSON.parse($(this).attr('data-data'));
-        $('input[name=ppkname]').val(_data.ppkname);
-        $('input[name=companyname]').val(_data.companyname);
-        $('input[name=companyleader]').val(_data.companyleader);
+        $('input[name=ppkid]').val(_data.ppkid);
+        $('input[name=name]').val(_data.name);
+        $('input[name=year]').val(_data.year);
         $('#update-btn').attr('data-id', _data.id);
 
         $('#error').hide();
@@ -105,13 +110,21 @@ jQuery(document).ready(function () {
         }
     });
 
+    drawtable();
     var table = $('#ppk-table').DataTable({
         serverSide: true,
         lengthChange: true,
         ajax: {
             url: '/admin/ppk',
             type: 'POST',
-            headers: {'X-CSRF-TOKEN': token}
+            headers: {'X-CSRF-TOKEN': token},
+            data: function (d) {
+                $.extend(d, this.data);
+                var _year = $('#ppk-table').data('year');
+                if (_year) {
+                    $.extend(d, _year);
+                }
+            }
         },
         columns: [{
             data: 'no',
@@ -119,13 +132,11 @@ jQuery(document).ready(function () {
             orderable: false,
             className: 'no'
         }, {
-            data: 'ppkname'
+            data: 'ppkid'
         }, {
-            data: 'companyname'
+            data: 'name',
         }, {
-            data: 'companyleader',
-        }, {
-            data: 'created_at',
+            data: 'year',
             orderable: false,
             searchable: false,
             className: 'right'
@@ -141,5 +152,34 @@ jQuery(document).ready(function () {
         order: [4, 'DESC']
     });
 
-    table.draw();
+    $('.dataTables_wrapper').prepend('<div class="row dataTables_filter">' +
+        '   <div class="col-md-6">' +
+        '       <select id="year" class="form-control js-example-basic-single" name="ppk_id">' +
+        '           <option value="0" selected>All Years</option>' +
+        '       </select>' +
+        '   </div>' +
+        '</div>');
+
+    $.ajax({
+        url: '/admin/ppk/year/get',
+        type: 'POST',
+        headers: {'X-CSRF-TOKEN': token},
+        success: function (data) {
+            if (data.status) {
+                var _data = data.data;
+                $.each(_data, function (index, value) {
+                    $('#year').append("<option value='" + index + "'>" + index + "</option>");
+                });
+            }
+        }
+    });
+
+    $(document).on('change', '#year', function() {
+        selectedyear = $(this).val();
+        drawtable();
+        table.draw();
+    });
+
+
+
 });
