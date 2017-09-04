@@ -14,8 +14,8 @@
                             <tr>
                                 <th class="no">#</th>
                                 <th>PPK Name</th>
-                                <th>Company Leader</th>
-                                <th>Date Created</th>
+                                <th>Employee Name</th>
+                                <th>Year</th>
                                 <th>Action</th>
                             </tr>
                             </thead>
@@ -38,16 +38,23 @@
                 <div class="modal-body">
                     <div class="alert nonmodalalert redalert" id="error"></div>
                     <div class="form-group">
-                        <label for="ppkname" class="col-md-3 control-label">PPK Name</label>
+                        <label for="ppkid" class="col-md-3 control-label">PPK Name</label>
                         <div class="col-md-9">
-                            <input type="text" name="ppkname" class="form-control" placeholder="eg. PPK01">
+                            <input id="ppkid" type="text" name="ppkid" class="form-control" placeholder="eg. PPK01">
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="companyleader" class="col-md-3 control-label">Company Leader</label>
+                        <label for="name" class="col-md-3 control-label">Employee Name</label>
                         <div class="col-md-9">
-                            <input type="text" name="companyleader" class="form-control" placeholder="eg. Patar Ebenezer Siahaan">
+                            <input id="name" type="text" name="name" class="form-control" placeholder="eg. Patar Ebenezer Siahaan">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="year" class="col-md-3 control-label">Year</label>
+                        <div class="col-md-9">
+                            <input id="year" type="text" name="year" class="form-control" placeholder="eg. 2017">
                         </div>
                     </div>
 

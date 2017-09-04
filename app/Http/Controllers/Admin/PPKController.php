@@ -10,6 +10,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Model\PPK;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PPKController extends Controller
 {
@@ -25,11 +26,18 @@ class PPKController extends Controller
         if ($this->isPost()) {
             $ppkModel = new PPK();
 
-            $columns = ['no', 'ppkname', 'companyleader', 'created_at'];
+            $columns = ['no', 'ppkid', 'name', 'year', 'created_at'];
             $where = array(
-                ['ppkname', 'LIKE', '%' . $request['search']['value'] . '%'],
-                ['companyleader', 'LIKE', '%' . $request['search']['value'] . '%', 'OR']
+                ['isactive', '=', '1',],
+                ['ppkid', 'LIKE', '%' . $request['search']['value'] . '%', 'AND ('],
+                ['name', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
+                ['id', '>', '0', ') AND']
             );
+
+            if ($request['year'] > 0) {
+                $where[] = ['year', '=', $request['year']];
+            }
+
             $ppks = $ppkModel->find_v2($where, true, ['*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir']);
             $number = intval($request['start']) + 1;
             foreach ($ppks as &$item) {
@@ -74,8 +82,8 @@ class PPKController extends Controller
              * @todo validate request
              */
             $rules = array(
-                'ppkname' => 'required|unique:ppk',
-                'companyleader' => 'required|unique:ppk'
+                'ppkid' => 'required|unique:ppk',
+                'name' => 'required|unique:ppk'
             );
 
             if (null !== $this->validate_v2($request, $rules)) {
@@ -88,11 +96,12 @@ class PPKController extends Controller
              */
             try {
                 $data = $request->all();
+                $data['admin_id'] = Auth::user()->id;
                 $ppkModel::create($data);
                 $this->response_json->status = true;
                 $this->response_json->message = 'PPK added.';
             } catch (\Exception $e) {
-                $this->response_json->message = $this->getServerError();
+                $this->response_json->message = $e->getMessage();
             }
             return $this->__json();
         }
@@ -119,8 +128,8 @@ class PPKController extends Controller
              * @todo validate request
              */
             $rules = array(
-                'ppkname' => 'required',
-                'companyleader' => 'required'
+                'ppkid' => 'required',
+                'name' => 'required'
             );
 
             if (null !== $this->validate_v2($request, $rules)) {
@@ -129,11 +138,11 @@ class PPKController extends Controller
             }
 
             $where = array(
-                ['ppkname', '=', $request['ppkname']],
+                ['ppkid', '=', $request['ppkid']],
                 ['id', '<>', $request['id']]
             );
             if ($ppkModel->find_v2($where)) {
-                $this->response_json->message = 'PPK name already taken';
+                $this->response_json->message = 'PPK Name already taken';
                 return $this->__json();
             }
 
@@ -145,7 +154,7 @@ class PPKController extends Controller
                 foreach ($ppkModel->getFillable() as $field) {
                     $ppk[$field] = $request[$field];
                 }
-
+                $ppk['admin_id'] = Auth::user()->id;
                 $ppk->update();
                 $this->response_json->status = true;
                 $this->response_json->message = 'PPK updated.';
@@ -186,6 +195,20 @@ class PPKController extends Controller
         if ($this->isPost()) {
             $ppks = PPK::all();
             $this->response_json->data = $ppks;
+            $this->response_json->status = true;
+            return $this->__json();
+        }
+    }
+
+    /**
+     * @todo return all year of ppk
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function getyear() {
+        if ($this->isPost()) {
+            $years = PPK::all()->groupBy('year');
+            $this->response_json->data = $years;
             $this->response_json->status = true;
             return $this->__json();
         }
