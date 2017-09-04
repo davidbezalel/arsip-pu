@@ -14,8 +14,8 @@
                             <tr>
                                 <th class="no">#</th>
                                 <th width="500px">Title</th>
-                                <th>Year</th>
-                                <th>Date Created</th>
+                                <th>Start Year</th>
+                                <th>End Year</th>
                                 <th>Action</th>
                             </tr>
                             </thead>

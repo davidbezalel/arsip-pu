@@ -6,6 +6,13 @@ jQuery(document).ready(function () {
         $('#successmodal').modal();
     };
 
+    var selectedyear = 0;
+
+    var drawtable = function () {
+        console.log('testing');
+        $('#paket-table').data('year', {year: selectedyear});
+    }
+
     var modalhide = function () {
         $('#paket-modal').fadeOut('slow', function () {
             $(this).modal('hide');
@@ -56,8 +63,14 @@ jQuery(document).ready(function () {
         var _data = JSON.parse($(this).attr('data-data'));
         var _subpaket = JSON.parse($(this).attr('data-subpaket'));
         $('input[name=title]').val(_data.title);
-        $('input[name=year]').val(_data.year);
-        $('input[name=companyprovider]').val(_data.companyprovider);
+        $('input[name=startyear]').val(_data.startyear);
+        if (_data.ismultiyears) {
+            $('input[name=ismultiyears]').attr('checked', true);
+            $('input[name=yearsofwork]').val(_data.yearsofwork).attr('disabled', true).show();
+        } else {
+            $('input[name=yearsofwork]').hide();
+            $('input[name=ismultiyears]').attr('checked', false);
+        }
         $('#update-btn').attr('data-id', _data.id);
         $('#addsubpaket').hide();
 
@@ -153,7 +166,14 @@ jQuery(document).ready(function () {
         ajax: {
             url: '/admin/paket',
             type: 'POST',
-            headers: {'X-CSRF-TOKEN': token}
+            headers: {'X-CSRF-TOKEN': token},
+            data: function (d) {
+                $.extend(d, this.data);
+                var _year = $('#paket-table').data('year');
+                if (_year) {
+                    $.extend(d, _year);
+                }
+            }
         },
         columns: [{
             data: 'no',
@@ -163,12 +183,9 @@ jQuery(document).ready(function () {
         }, {
             data: 'title'
         }, {
-            data: 'year'
+            data: 'startyear'
         }, {
-            data: 'created_at',
-            orderable: false,
-            searchable: false,
-            className: 'right'
+            data: 'endyear',
         }, {
             data: null,
             orderable: false,
@@ -181,5 +198,34 @@ jQuery(document).ready(function () {
         order: [3, 'DESC']
     });
 
+    drawtable();
     table.draw();
+
+    $('.dataTables_wrapper').prepend('<div class="row dataTables_filter">' +
+        '   <div class="col-md-6">' +
+        '       <select id="year" class="form-control js-example-basic-single" name="ppk_id">' +
+        '           <option value="0" selected>All Years</option>' +
+        '       </select>' +
+        '   </div>' +
+        '</div>');
+
+    $.ajax({
+        url: '/admin/paket/year/get',
+        type: 'POST',
+        headers: {'X-CSRF-TOKEN': token},
+        success: function (data) {
+            if (data.status) {
+                var _data = data.data;
+                $.each(_data, function (index, value) {
+                    $('#year').append("<option value='" + index + "'>" + index + "</option>");
+                });
+            }
+        }
+    });
+
+    $(document).on('change', '#year', function() {
+        selectedyear = $(this).val();
+        drawtable();
+        table.draw();
+    });
 });

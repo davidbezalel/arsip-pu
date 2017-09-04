@@ -32,20 +32,29 @@ class PaketController extends Controller
             $paketModel = new Paket();
             $subpaketmodel = new SubPaket();
 
-            $columns = ['no', 'title', 'year', 'created_at'];
+            $columns = ['no', 'title', 'startyear', 'created_at'];
             $where = array(
                 ['title', 'LIKE', '%' . $request['search']['value'] . '%']
             );
+
+            if ($request['year'] > 0) {
+                $where[] = ['startyear', '<=', (int)$request['year']];
+            }
             $pakets = $paketModel->find_v2($where, true, ['*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir']);
+            $_pakets = array();
             $number = intval($request['start']) + 1;
             foreach ($pakets as &$item) {
                 $item['no'] = $number;
                 $item['subpaket'] = SubPaket::where('paket_id', $item['id'])->get();
+                $item['endyear'] = $item['startyear'] + $item['yearsofwork'] - 1;
+                if ((int)$request['year'] <= $item['endyear']) {
+                    $_pakets[] = $item;
+                }
                 $number++;
             }
             $response_json = array();
             $response_json['draw'] = $request['draw'];
-            $response_json['data'] = $pakets;
+            $response_json['data'] = $_pakets;
             $response_json['recordsTotal'] = $paketModel->getTableCount($where);
             $response_json['recordsFiltered'] = $paketModel->getTableCount($where);
             return $this->__json($response_json);
@@ -251,6 +260,15 @@ class PaketController extends Controller
         if ($this->isPost()) {
             $subpakets = SubPaket::where('paket_id', '=', $paket_id)->get();
             $this->response_json->data = $subpakets;
+            $this->response_json->status = true;
+            return $this->__json();
+        }
+    }
+
+    public function getyear() {
+        if ($this->isPost()) {
+            $years = PaketYear::all()->groupBy('year');
+            $this->response_json->data = $years;
             $this->response_json->status = true;
             return $this->__json();
         }
