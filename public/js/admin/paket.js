@@ -9,7 +9,6 @@ jQuery(document).ready(function () {
     var selectedyear = 0;
 
     var drawtable = function () {
-        console.log('testing');
         $('#paket-table').data('year', {year: selectedyear});
     }
 
@@ -216,9 +215,9 @@ jQuery(document).ready(function () {
         success: function (data) {
             if (data.status) {
                 var _data = data.data;
-                $.each(_data, function (index, value) {
-                    $('#year').append("<option value='" + index + "'>" + index + "</option>");
-                });
+                for (i = _data.startyear; i <= _data.endyear; i++) {
+                    $('#year').append("<option value='" + i + "'>" + i + "</option>");
+                }
             }
         }
     });

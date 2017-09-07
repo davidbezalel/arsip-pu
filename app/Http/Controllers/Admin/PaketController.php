@@ -10,7 +10,6 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Model\Kontrak;
 use App\Model\Paket;
-use App\Model\PaketYear;
 use App\Model\ReportType;
 use App\Model\SubPaket;
 use Illuminate\Http\Request;
@@ -39,22 +38,18 @@ class PaketController extends Controller
 
             if ($request['year'] > 0) {
                 $where[] = ['startyear', '<=', (int)$request['year']];
+                $where[] = ['endyear', '>=', (int)$request['year']];
             }
             $pakets = $paketModel->find_v2($where, true, ['*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir']);
-            $_pakets = array();
             $number = intval($request['start']) + 1;
             foreach ($pakets as &$item) {
                 $item['no'] = $number;
                 $item['subpaket'] = SubPaket::where('paket_id', $item['id'])->get();
-                $item['endyear'] = $item['startyear'] + $item['yearsofwork'] - 1;
-                if ((int)$request['year'] <= $item['endyear']) {
-                    $_pakets[] = $item;
-                }
                 $number++;
             }
             $response_json = array();
             $response_json['draw'] = $request['draw'];
-            $response_json['data'] = $_pakets;
+            $response_json['data'] = $pakets;
             $response_json['recordsTotal'] = $paketModel->getTableCount($where);
             $response_json['recordsFiltered'] = $paketModel->getTableCount($where);
             return $this->__json($response_json);
@@ -77,7 +72,6 @@ class PaketController extends Controller
      *
      * paket: insert
      * subpaket: insert
-     * paketyear: insert
      *
      * @param $request
      * @return \Illuminate\Http\JsonResponse
@@ -108,6 +102,7 @@ class PaketController extends Controller
                 $data = $request->all();
                 $data['ismultiyears'] = isset($request['ismultiyears']) ? 1 : 0;
                 $data['yearsofwork'] = ($request['yearsofwork'] == "" || $data['ismultiyears'] == 0) ? 1 : $request['yearsofwork'];
+                $data['endyear'] = $data['startyear'] + $data['yearsofwork'] - 1;
                 $data['admin_id'] = Auth::user()->id;
                 $paket = $paketModel::create($data);
 
@@ -129,17 +124,6 @@ class PaketController extends Controller
                         SubPaket::create($data);
                     }
                 }
-
-                /**
-                 * @todo paketyear
-                 */
-                $data = array();
-                $data['paket_id'] = $paket['id'];
-                for ($i = 0; $i < $paket['yearsofwork']; $i++) {
-                    $data['year'] = $request['startyear'] + $i;
-                    PaketYear::create($data);
-                }
-
 
                 DB::commit();
                 $this->response_json->status = true;
@@ -267,7 +251,11 @@ class PaketController extends Controller
 
     public function getyear() {
         if ($this->isPost()) {
-            $years = PaketYear::all()->groupBy('year');
+            $paketmodel = new Paket();
+            $startyear = $paketmodel->orderBy('startyear', 'asc')->get(['startyear'])->first();
+            $endyear = $paketmodel->orderBy('endyear', 'desc')->get(['endyear'])->first();
+            $years['startyear'] = $startyear['startyear'];
+            $years['endyear'] = $endyear['endyear'];
             $this->response_json->data = $years;
             $this->response_json->status = true;
             return $this->__json();
