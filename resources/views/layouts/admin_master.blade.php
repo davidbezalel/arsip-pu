@@ -92,10 +92,10 @@
                     </a>
                 </li>
 
-                {{-- Kontrak menu --}}
+                {{-- Penunjukan PPK menu --}}
                 <li class="<?php echo($data['controller'] == 'kontrak' ? 'active' : ''); ?> treeview">
-                    <a href="/admin/kontrak">
-                        <i class="fa"><span class="fa fa-thumbs-up"></span></i> <span>Kontrak</span>
+                    <a href="/admin/ppkappointment">
+                        <i class="fa"><span class="fa fa-thumbs-up"></span></i> <span>Penunjukan PPK</span>
                     </a>
                 </li>
 

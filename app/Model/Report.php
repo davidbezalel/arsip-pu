@@ -9,5 +9,5 @@ class Report extends Model
 {
     public $timestamps = false;
     protected $table = 'report';
-    protected $fillable = ['kontrakdetail_id', 'report_classification_id', 'report_param_id'];
+    protected $fillable = ['subpaket_id', 'reportparam_id', 'title'];
 }
