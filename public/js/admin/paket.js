@@ -202,7 +202,7 @@ jQuery(document).ready(function () {
 
     $('.dataTables_wrapper').prepend('<div class="row dataTables_filter">' +
         '   <div class="col-md-6">' +
-        '       <select id="year" class="form-control js-example-basic-single" name="ppk_id">' +
+        '       <select id="year" class="form-control js-example-basic-single" name="year">' +
         '           <option value="0" selected>All Years</option>' +
         '       </select>' +
         '   </div>' +

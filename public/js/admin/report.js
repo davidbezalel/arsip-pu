@@ -9,131 +9,120 @@ jQuery(document).ready(function () {
     $('#content').hide();
 
     $.ajax({
-        url: '/admin/ppk/get',
+        url: '/admin/paket/year/get',
         type: 'POST',
         headers: {'X-CSRF-TOKEN': token},
         success: function (data) {
             if (data.status) {
                 var _data = data.data;
-                var _option = '';
-                $.each(_data, function (index, value) {
-                    _option = '<option value="' + value.id + '"> ' + value.ppkname + '</option>';
-                    $('#ppkname').append(_option);
-                });
+                for (i = _data.startyear; i <= _data.endyear; i++) {
+                    $('#year').append("<option value='" + i + "'>" + i + "</option>");
+                }
             }
         }
     });
 
-    $('#ppkname').select2();
-    $('#paketname').select2();
-    $('#subpaketname').select2();
-
-    $('#error').hide();
-
-    $('#ppkname').change(function () {
-        var _id = $(this).val();
-        $('#content').hide();
-
+    var makemainreport = function (paketid) {
         $.ajax({
-            url: '/admin/paket/get/ppk/' + _id,
+            url: '/admin/report/main/get/' + paketid,
             type: 'POST',
-            cache: false,
             headers: {'X-CSRF-TOKEN': token},
             success: function (data) {
                 if (data.status) {
                     var _data = data.data;
-                    var _option = '';
-                    if (_data.length > 0) {
-                        $('#paketname').empty().append('<option value="0" selected disabled>Silahkan pilih Paket.</option>');
-                        $.each(_data, function (index, value) {
-                            _option = '<option value="' + value.paket_id + '"> ' + value.paket.title + '</option>';
-                            $('#paketname').append(_option);
-                            $('#paketname').attr('disabled', false);
-                        });
-                    } else {
-                        $('#paketname').empty().append('<option value="0" selected disabled>PPK tidak memiliki Paket.</option>');
-                    }
-                    $('#subpaketname').empty().attr('disabled', true);
+                    var _html = '<div class="row">' +
+                        '            <div class="col-md-12">' +
+                        '                <div class="box box-default">' +
+                        '                    <div class="box-header with-border">' +
+                        '                        <h3 class="box-title">' + "Laporan Utama" + '</h3>' +
+                        '                        <div class="box-tools pull-right">' +
+                        '                           <button type="button" class="btn btn-box-tool" data-widget="collapse">' +
+                        '                               <i class="fa fa-minus"></i>' +
+                        '                            </button>' +
+                        '                       </div>' +
+                        '                    </div>' +
+                        '                    <div class="box-body">' +
+                        '                       <table class="table table-bordered">' +
+                        '                           <tbody id="utama">' +
+                        '                               <tr>' +
+                        '                                   <th>Nama Laporan</th>' +
+                        '                                   <th>Status Penyerahan</th>' +
+                        '                                   <th>Status Ketersediaan</th>' +
+                        '                                   <th>Action</th>' +
+                        '                               </tr>' +
+                        '                           </tbody>' +
+                        '                       </table>' +
+                        '                    </div>' +
+                        '                </div>' +
+                        '            </div>' +
+                        '        </div>';
+                    $('#content').empty().append(_html);
+                    $.each(_data, function (index, value) {
+                        if (value.isfilesubmitted == 0) {
+                            _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-danger btn-flat">Berkas Belum diserahkan</button >';
+                        } else if (value.isfilesubmitted == 1 && value.isavailable == 1) {
+                            _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.filesubmissionid + '" class="btn btn-success btn-flat">Berkas Lengkap</button >';
+                        } else if (value.isfilesubmitted == 1 && value.isavailable == 0) {
+                            _action = '<button id="kembalikan" data-report="' + value.id + '" data-peminjaman-berkas="' + value.loanfileid + '" class="btn btn-primary btn-flat">Berkas dipinjam</button >';
+                        }
+                        _tr = '<tr>' +
+                            '       <td>' + value.reportparamtitle + '</td>' +
+                            '       <td style="text-align: right;"><i class="fa ' + (value.isfilesubmitted == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
+                            '       <td style="text-align: right;"><i class="fa ' + (value.isavailable == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
+                            '       <td style="text-align: right;">' + _action + '</td>' +
+                            '</tr>';
+                        $('#utama').append(_tr);
+                    });
+                    $('#content').show();
                 }
             }
         });
-    });
+    };
 
-    var makereport = function (type) {
+    var makemcreport = function (paketid) {
         $.ajax({
-            url: '/admin/reportclassification/get',
+            url: '/admin/report/mc/get/' + paketid,
             type: 'POST',
-            cache: false,
             headers: {'X-CSRF-TOKEN': token},
             success: function (data) {
                 if (data.status) {
-                    var __data = data.data;
-                    $('#content').empty();
-                    $.each(__data, function (index, value) {
-                        if (type == "Utama") {
-                            if (value.name == "Utama") {
-                                var _html = '<div class="row">' +
-                                    '            <div class="col-md-12">' +
-                                    '                <div class="box box-default">' +
-                                    '                    <div class="box-header with-border">' +
-                                    '                        <h3 class="box-title">' + "Laporan Utama" + '</h3>' +
-                                    '                        <div class="box-tools pull-right">' +
-                                    '                           <button type="button" class="btn btn-box-tool" data-widget="collapse">' +
-                                    '                               <i class="fa fa-minus"></i>' +
-                                    '                            </button>' +
-                                    '                       </div>' +
-                                    '                    </div>' +
-                                    '                    <div class="box-body">' +
-                                    '                       <table class="table table-bordered">' +
-                                    '                           <tbody id="' + value.name + '">' +
-                                    '                               <tr>' +
-                                    '                                   <th>Nama Laporan</th>' +
-                                    '                                   <th>Status Penyerahan</th>' +
-                                    '                                   <th>Status Ketersediaan</th>' +
-                                    '                                   <th>Action</th>' +
-                                    '                               </tr>' +
-                                    '                           </tbody>' +
-                                    '                       </table>' +
-                                    '                    </div>' +
-                                    '                </div>' +
-                                    '            </div>' +
-                                    '        </div>';
-                            }
-                        } else if (type == "Bulanan") {
-                            if (value.name != "Utama") {
-                                var _html = '<div class="row">' +
-                                    '            <div class="col-md-12">' +
-                                    '                <div class="box box-default">' +
-                                    '                    <div class="box-header with-border">' +
-                                    '                        <h3 class="box-title">' + value.name + '</h3>' +
-                                    '                        <div class="box-tools pull-right">' +
-                                    '                           <button type="button" class="btn btn-box-tool" data-widget="collapse">' +
-                                    '                               <i class="fa fa-minus"></i>' +
-                                    '                            </button>' +
-                                    '                       </div>' +
-                                    '                    </div>' +
-                                    '                    <div class="box-body">' +
-                                    '                       <table class="table table-bordered">' +
-                                    '                           <tbody id="' + value.name + '">' +
-                                    '                               <tr>' +
-                                    '                                   <th>Nama Laporan</th>' +
-                                    '                                   <th>Status Penyerahan</th>' +
-                                    '                                   <th>Status Ketersediaan</th>' +
-                                    '                                   <th>Action</th>' +
-                                    '                               </tr>' +
-                                    '                           </tbody>' +
-                                    '                       </table>' +
-                                    '                    </div>' +
-                                    '                </div>' +
-                                    '            </div>' +
-                                    '        </div>';
-                            }
-                        } else if (type == 'all') {
+                    var _data = data.data;
+                    var _title = _data[0].title;
+                    var _html = '<div class="row">' +
+                        '            <div class="col-md-12">' +
+                        '                <div class="box box-default">' +
+                        '                    <div class="box-header with-border">' +
+                        '                        <h3 class="box-title">' + _data[0].title + '</h3>' +
+                        '                        <div class="box-tools pull-right">' +
+                        '                           <button type="button" class="btn btn-box-tool" data-widget="collapse">' +
+                        '                               <i class="fa fa-minus"></i>' +
+                        '                            </button>' +
+                        '                       </div>' +
+                        '                    </div>' +
+                        '                    <div class="box-body">' +
+                        '                       <table class="table table-bordered">' +
+                        '                           <tbody id="' + _data[0].title + '">' +
+                        '                               <tr>' +
+                        '                                   <th>Nama Laporan</th>' +
+                        '                                   <th>Status Penyerahan</th>' +
+                        '                                   <th>Status Ketersediaan</th>' +
+                        '                                   <th>Action</th>' +
+                        '                               </tr>' +
+                        '                           </tbody>' +
+                        '                       </table>' +
+                        '                    </div>' +
+                        '                </div>' +
+                        '            </div>' +
+                        '        </div>';
+                    $('#content').empty().append(_html);
+                    $.each(_data, function (index, value) {
+                        console.log(value.title, _title);
+                        if (value.title != _title) {
                             var _html = '<div class="row">' +
                                 '            <div class="col-md-12">' +
                                 '                <div class="box box-default">' +
                                 '                    <div class="box-header with-border">' +
-                                '                        <h3 class="box-title">' + (value.name == "Utama" ? "Laporan Utama" : value.name) + '</h3>' +
+                                '                        <h3 class="box-title">' + value.title + '</h3>' +
                                 '                        <div class="box-tools pull-right">' +
                                 '                           <button type="button" class="btn btn-box-tool" data-widget="collapse">' +
                                 '                               <i class="fa fa-minus"></i>' +
@@ -142,7 +131,7 @@ jQuery(document).ready(function () {
                                 '                    </div>' +
                                 '                    <div class="box-body">' +
                                 '                       <table class="table table-bordered">' +
-                                '                           <tbody id="' + value.name + '">' +
+                                '                           <tbody id="' + value.title + '">' +
                                 '                               <tr>' +
                                 '                                   <th>Nama Laporan</th>' +
                                 '                                   <th>Status Penyerahan</th>' +
@@ -155,86 +144,64 @@ jQuery(document).ready(function () {
                                 '                </div>' +
                                 '            </div>' +
                                 '        </div>';
+                            $('#content').append(_html);
+                            _title = value.title;
                         }
-                        $('#content').append(_html);
                     });
-                }
-            }
-        })
-    };
 
-    var makereport2 = function (type) {
-        var _ppkid = $('#ppkname').val();
-        var _paketid = $('#paketname').val();
-        var _data = 'ppk_id=' + _ppkid + '&paket_id=' + _paketid;
-        var _subpaketid = $('#subpaketname').val();
-        $.ajax({
-            url: '/admin/laporan/get',
-            type: 'POST',
-            data: _data,
-            headers: {'X-CSRF-TOKEN': token},
-            success: function (data) {
-                if (data.status) {
-                    var __data = data.data;
-                    var _tr = '';
-                    var _action = '';
-                    $.each(__data, function (index, value) {
-                        if (value.report_classification_name == type) {
-                            if (value.is_reported == 0) {
-                                _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-primary btn-flat">Serahkan Berkas</button >';
-                            } else if (value.is_reported == 1 && value.is_available == 1) {
-                                _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.document_report_id + '" class="btn btn-success btn-flat">Pinjam Berkas</button >';
-                            } else if (value.is_reported == 1 && value.is_available == 0) {
-                                _action = '<button id="kembalikan" data-report="' + value.id + '" data-peminjaman-berkas="' + value.peminjaman_berkas_id + '" class="btn btn-danger btn-flat">Kembalikan Berkas</button >';
-                            }
-                            _tr = '<tr>' +
-                                '       <td>' + value.report_param_name + '</td>' +
-                                '       <td style="text-align: right;"><i class="fa ' + (value.is_reported == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
-                                '       <td style="text-align: right;"><i class="fa ' + (value.is_available == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
-                                '       <td style="text-align: right;">' + _action + '</td>' +
-                                '</tr>';
-                            $('#Utama').append(_tr);
-                        } else {
-                            if (value.subpaketid == _subpaketid) {
-                                if (value.is_reported == 0) {
-                                    _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-primary btn-flat">Serahkan Berkas</button >';
-                                } else if (value.is_reported == 1 && value.is_available == 1) {
-                                    _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.document_report_id + '" class="btn btn-success btn-flat">Pinjam Berkas</button >';
-                                } else if (value.is_reported == 1 && value.is_available == 0) {
-                                    _action = '<button id="kembalikan" data-report="' + value.id + '" data-peminjaman-berkas="' + value.peminjaman_berkas_id + '" class="btn btn-danger btn-flat">Kembalikan Berkas</button >';
-                                }
-                                _tr = '<tr>' +
-                                    '       <td>' + value.report_param_name + '</td>' +
-                                    '       <td style="text-align: right;"><i class="fa ' + (value.is_reported == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
-                                    '       <td style="text-align: right;"><i class="fa ' + (value.is_available == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
-                                    '       <td style="text-align: right;">' + _action + '</td>' +
-                                    '</tr>';
-                                $('#' + value.report_classification_name).append(_tr);
-
-                            }
+                    $.each(_data, function (index, value) {
+                        if (value.isfilesubmitted == 0) {
+                            _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-danger btn-flat">Berkas Belum diserahkan</button >';
+                        } else if (value.isfilesubmitted == 1 && value.isavailable == 1) {
+                            _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.filesubmissionid + '" class="btn btn-success btn-flat">Berkas Lengkap</button >';
+                        } else if (value.isfilesubmitted == 1 && value.isavailable == 0) {
+                            _action = '<button id="kembalikan" data-report="' + value.id + '" data-peminjaman-berkas="' + value.loanfileid + '" class="btn btn-primary btn-flat">Berkas dipinjam</button >';
                         }
-                        if (type == "all") {
-                            if (value.is_reported == 0) {
-                                _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-primary btn-flat">Serahkan Berkas</button >';
-                            } else if (value.is_reported == 1 && value.is_available == 1) {
-                                _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.document_report_id + '" class="btn btn-success btn-flat">Pinjam Berkas</button >';
-                            } else if (value.is_reported == 1 && value.is_available == 0) {
-                                _action = '<button id="kembalikan" data-report="' + value.id + '" data-peminjaman-berkas="' + value.peminjaman_berkas_id + '" class="btn btn-danger btn-flat">Kembalikan Berkas</button >';
-                            }
-                            _tr = '<tr>' +
-                                '       <td>' + value.report_param_name + '</td>' +
-                                '       <td style="text-align: right;"><i class="fa ' + (value.is_reported == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
-                                '       <td style="text-align: right;"><i class="fa ' + (value.is_available == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
-                                '       <td style="text-align: right;">' + _action + '</td>' +
-                                '</tr>';
-                            $('#' + value.report_classification_name).append(_tr);
-                        }
+                        _tr = '<tr>' +
+                            '       <td>' + value.reportparamtitle + '</td>' +
+                            '       <td style="text-align: right;"><i class="fa ' + (value.isfilesubmitted == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
+                            '       <td style="text-align: right;"><i class="fa ' + (value.isavailable == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
+                            '       <td style="text-align: right;">' + _action + '</td>' +
+                            '</tr>';
+                        $('#' + value.title).append(_tr);
                     });
                     $('#content').show();
                 }
             }
         });
     };
+
+
+    $('#paketname').select2();
+    $('#subpaketname').select2();
+
+    $('#error').hide();
+
+    $('#year').change(function () {
+        var _year = $(this).val();
+        $('#content').hide();
+
+        $.ajax({
+            url: '/admin/paket/get/year/' + _year,
+            type: 'POST',
+            cache: false,
+            headers: {'X-CSRF-TOKEN': token},
+            success: function (data) {
+                if (data.status) {
+                    var _data = data.data;
+                    var _option = '';
+                    $('#paketname').empty().append('<option value="0" selected disabled>Silahkan pilih Paket.</option>');
+                    $.each(_data, function (index, value) {
+                        _option = '<option value="' + value.id + '"> ' + value.title + '</option>';
+                        $('#paketname').append(_option);
+                        $('#paketname').attr('disabled', false);
+                    });
+                    $('#subpaketname').empty().attr('disabled', true);
+                }
+            }
+        });
+    });
+
 
     $('#paketname').change(function () {
         var _id = $(this).val();
@@ -248,33 +215,19 @@ jQuery(document).ready(function () {
                 if (data.status) {
                     var _data = data.data;
                     var _option = '';
-                    console.log(_data);
                     if (_data.length > 1) {
                         $('#subpaketname').empty().append('<option value="0" selected>Tampilkan Laporan Utama.</option>');
                         $.each(_data, function (index, value) {
-                            if (value.type == "Bulanan") {
+                            if (value.reporttype_id == 2) {
                                 _option = '<option value="' + value.id + '"> ' + value.title + '</option>';
                                 $('#subpaketname').append(_option);
                             }
                         });
                         $('#subpaketname').attr('disabled', false);
-                        _isall = false;
+                        makemainreport(_id);
                     } else {
                         $('#subpaketname').empty().append('<option value="0" selected disabled>Paket ini tidak memiliki Sub-Paket.</option>');
                         $('#subpaketname').attr('disabled', true);
-                        _isall = true;
-                    }
-                    if (_isall) {
-                        makereport('all');
-                        makereport2('all');
-                    } else {
-                        if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
-                            makereport('Utama');
-                            makereport2('Utama');
-                        } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
-                            makereport('Bulanan');
-                            makereport2('Bulanan');
-                        }
                     }
                 }
             }
@@ -283,11 +236,9 @@ jQuery(document).ready(function () {
 
     $('#subpaketname').change(function () {
         if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
-            makereport('Utama');
-            makereport2('Utama');
+            makemainreport($('#paketname').val());
         } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
-            makereport('Bulanan');
-            makereport2('Bulanan');
+            makemcreport($('#subpaketname').val());
         }
     });
 
@@ -303,11 +254,9 @@ jQuery(document).ready(function () {
                 success: function (data) {
                     if (data.status) {
                         if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
-                            makereport('Utama');
-                            makereport2('Utama');
+                            makemainreport($('#paketname').val());
                         } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
-                            makereport('Bulanan');
-                            makereport2('Bulanan');
+                            makemcreport($('#subpaketname').val());
                         }
                     }
                 }
@@ -317,7 +266,7 @@ jQuery(document).ready(function () {
 
     $(document).on('click', '#pinjam', function (event) {
         if (confirm('Apakah anda yakin berkas yang dipinjam telah lengkap?')) {
-            var _data = 'report_id=' + $(this).attr('data-report') + '&document_report_id=' + $(this).attr('data-document-report');
+            var _data = 'report_id=' + $(this).attr('data-report') + '&filesubmissionid=' + $(this).attr('data-document-report');
             $.ajax({
                 url: '/admin/laporan/pinjam',
                 type: 'POST',
@@ -326,11 +275,9 @@ jQuery(document).ready(function () {
                 success: function (data) {
                     if (data.status) {
                         if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
-                            makereport('Utama');
-                            makereport2('Utama');
+                            makemainreport($('#paketname').val());
                         } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
-                            makereport('Bulanan');
-                            makereport2('Bulanan');
+                            makemcreport($('#subpaketname').val());
                         }
                     }
                 }
@@ -340,7 +287,7 @@ jQuery(document).ready(function () {
 
     $(document).on('click', '#kembalikan', function (event) {
         if (confirm('Apakah anda yakin berkas yang dikembaliakan telah lengkap?')) {
-            var _data = 'report_id=' + $(this).attr('data-report') + '&peminjaman_berkas_id=' + $(this).attr('data-peminjaman-berkas');
+            var _data = 'report_id=' + $(this).attr('data-report') + '&loanfileid=' + $(this).attr('data-peminjaman-berkas');
             $.ajax({
                 url: '/admin/laporan/kembalikan',
                 type: 'POST',
@@ -349,15 +296,14 @@ jQuery(document).ready(function () {
                 success: function (data) {
                     if (data.status) {
                         if (($('#subpaketname').val() == null || $('#subpaketname').val() == 0) && $('#paketname').val() != null) {
-                            makereport('Utama');
-                            makereport2('Utama');
+                            makemainreport($('#paketname').val());
                         } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
-                            makereport('Bulanan');
-                            makereport2('Bulanan');
+                            makemcreport($('#subpaketname').val());
                         }
                     }
                 }
             });
         }
     });
-});
+})
+;

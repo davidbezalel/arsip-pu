@@ -21,7 +21,7 @@ jQuery(document).ready(function () {
                 var _data = data.data;
                 var _option = '';
                 $.each(_data, function (index, value) {
-                    _option = '<option value="' + value.id + '"> ' + value.ppkname + '</option>';
+                    _option = '<option value="' + value.id + '"> ' + value.name + '</option>';
                     $('#ppkname').append(_option);
                 });
             }
@@ -142,7 +142,7 @@ jQuery(document).ready(function () {
         serverSide: true,
         lengthChange: true,
         ajax: {
-            url: '/admin/kontrak',
+            url: '/admin/ppkappointment',
             type: 'POST',
             headers: {'X-CSRF-TOKEN': token}
         },

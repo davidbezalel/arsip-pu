@@ -47,18 +47,20 @@ Route::group(['guard' => 'admin'], function () {
     Route::post('/admin/paket/get/ppk/{id}', 'Admin\PaketController@getbyppk');
     Route::post('/admin/paket/get/subpaket/{id}', 'Admin\PaketController@getsubpaket');
     Route::post('/admin/paket/year/get', 'Admin\PaketController@getyear');
+    Route::post('/admin/paket/get/year/{year}', 'Admin\PaketController@getppkbyyear');
 
     /**
-     * @var kontrak
+     * @var PPKAppointment
      */
-    Route::match(['get', 'post'], '/admin/kontrak', 'Admin\KontrakController@index');
-    Route::post('/admin/kontrak/add', 'Admin\KontrakController@add');
+    Route::match(['get', 'post'], '/admin/ppkappointment', 'Admin\PPKAppointmentController@index');
+    Route::post('/admin/ppkappointment/add', 'Admin\PPKAppointmentController@add');
 
     /**
      * @var report
      */
     Route::get('/admin/laporan', 'Admin\ReportController@index');
-    Route::post('/admin/laporan/get', 'Admin\ReportController@get');
+    Route::post('/admin/report/main/get/{paketid}', 'Admin\ReportController@getmainreport');
+    Route::post('/admin/report/mc/get/{paketid}', 'Admin\ReportController@getmcreport');
     Route::post('/admin/laporan/report', 'Admin\ReportController@serahkanberkas');
     Route::post('/admin/laporan/pinjam', 'Admin\ReportController@pinjamberkas');
     Route::post('/admin/laporan/kembalikan', 'Admin\ReportController@kembalikanberkas');

@@ -8,16 +8,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Model\Kontrak;
+use App\Model\PPKAppointment;
 use App\Model\KontrakDetail;
 use App\Model\Report;
 use App\Model\ReportClassification;
 use App\Model\ReportParam;
+use App\Model\ReportType;
 use App\Model\SubPaket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
-class KontrakController extends Controller
+class PPKAppointmentController extends Controller
 {
 
     /**
@@ -29,40 +30,40 @@ class KontrakController extends Controller
     public function index(Request $request)
     {
         if ($this->isPost()) {
-            $kontrakModel = new Kontrak();
+            $ppkappointmentmodel = new PPKAppointment();
 
-            $columns = ['no', 'ppk_id', 'paket_id', 'kontrak.created_at'];
+            $columns = ['no', 'ppk_id', 'paket_id', 'ppkappointment.created_at'];
             $where = array(
-                ['ppk.ppkname', 'LIKE', '%' . $request['search']['value'] . '%'],
-                ['ppk.companyleader', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
+                ['ppk.ppkid', 'LIKE', '%' . $request['search']['value'] . '%'],
+                ['ppk.name', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
                 ['paket.title', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
             );
 
             $join = array(
-                ['ppk', 'ppk.id', '=', 'kontrak.ppk_id'],
-                ['paket', 'paket.id', '=', 'kontrak.paket_id']
+                ['ppk', 'ppk.id', '=', 'ppkappointment.ppk_id'],
+                ['paket', 'paket.id', '=', 'ppkappointment.paket_id']
             );
 
-            $kontraks = $kontrakModel->find_v2($where, true, ['kontrak.*', 'paket.*', 'ppk.*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir'], $join);
+            $ppkappointments = $ppkappointmentmodel->find_v2($where, true, ['ppkappointment.*', 'paket.*', 'ppk.*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir'], $join);
             $number = intval($request['start']) + 1;
-            foreach ($kontraks as &$item) {
+            foreach ($ppkappointments as &$item) {
                 $item['no'] = $number;
                 $number++;
             }
             $response_json = array();
             $response_json['draw'] = $request['draw'];
-            $response_json['data'] = $kontraks;
-            $response_json['recordsTotal'] = $kontrakModel->getTableCount($where, $join);
-            $response_json['recordsFiltered'] = $kontrakModel->getTableCount($where, $join);
+            $response_json['data'] = $ppkappointments;
+            $response_json['recordsTotal'] = $ppkappointmentmodel->getTableCount($where, $join);
+            $response_json['recordsFiltered'] = $ppkappointmentmodel->getTableCount($where, $join);
             return $this->__json($response_json);
         }
         $styles = array();
         $scripts = array();
-        $scripts[] = 'kontrak.js';
+        $scripts[] = 'ppkappointment.js';
         $this->data['styles'] = $styles;
         $this->data['scripts'] = $scripts;
         $this->data['controller'] = 'kontrak';
-        $this->data['title'] = 'Kontrak';
+        $this->data['title'] = 'PPKAppointment';
         return view('admin.kontrak.index')->with('data', $this->data);
     }
 
@@ -84,7 +85,7 @@ class KontrakController extends Controller
     {
         if ($this->isPost()) {
 
-            $kontrakModel = new Kontrak();
+            $kontrakModel = new PPKAppointment();
 
             /**
              * @todo validate request
@@ -168,7 +169,7 @@ class KontrakController extends Controller
                 DB::commit();
 
                 $this->response_json->status = true;
-                $this->response_json->message = 'Kontrak added.';
+                $this->response_json->message = 'PPKAppointment added.';
             } catch (\Exception $e) {
         DB::rollback();
         $this->response_json->message = $this->getServerError();

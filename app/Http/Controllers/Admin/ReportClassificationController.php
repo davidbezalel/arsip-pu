@@ -8,7 +8,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Model\Kontrak;
+use App\Model\PPKAppointment;
 use App\Model\Paket;
 use App\Model\ReportClassification;
 use Illuminate\Http\Request;

@@ -8,8 +8,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Model\Kontrak;
+use App\Model\PPKAppointment;
 use App\Model\Paket;
+use App\Model\Report;
+use App\Model\ReportParam;
 use App\Model\ReportType;
 use App\Model\SubPaket;
 use Illuminate\Http\Request;
@@ -72,6 +74,7 @@ class PaketController extends Controller
      *
      * paket: insert
      * subpaket: insert
+     * report: insert
      *
      * @param $request
      * @return \Illuminate\Http\JsonResponse
@@ -85,8 +88,8 @@ class PaketController extends Controller
              * @todo validate request
              */
             $rules = array(
-                'title'=> 'required',
-                'startyear'=> 'required',
+                'title' => 'required',
+                'startyear' => 'required',
             );
 
             if (null !== $this->validate_v2($request, $rules)) {
@@ -114,21 +117,56 @@ class PaketController extends Controller
                 $data = array();
                 $data['paket_id'] = $paket['id'];
                 $data['title'] = $paket['title'];
-                $data['reporttype_id'] = ReportType::where('title', '=', 'Utama')->first()['id'];
+                $data['reporttype_id'] = ReportType::getutamaid();
                 SubPaket::create($data);
 
                 if (isset($request['subpakettitle'])) {
-                    $data['reporttype_id'] = ReportType::where('title', '=', 'MC')->first()['id'];
+                    $data['reporttype_id'] = ReportType::getmcid();
                     foreach ($request['subpakettitle'] as $key => $value) {
                         $data['title'] = $value;
                         SubPaket::create($data);
+                    }
+                } else {
+                    $data['reporttype_id'] = ReportType::getmcid();
+                    $data['title'] = $paket['title'];
+                    SubPaket::create($data);
+                }
+
+
+                /**
+                 * @todo report: insert
+                 *
+                 * create report depend on created subpaket
+                 * for each subpaket we have to make a compatible report depend on report type
+                 */
+                $subpakets = SubPaket::where('paket_id', '=', $paket['id'])->get();
+                $reportparams = ReportParam::all();
+                $isutamaoncecreated = false;
+                for ($i = 1; $i <= ($paket['endyear'] - $paket['startyear'] + 1) * 12; $i++) {
+                    $isutamacreated = $isutamaoncecreated;
+                    foreach ($subpakets as $subpaket) {
+                        $report['subpaket_id'] = $subpaket['id'];
+                        foreach ($reportparams as $reportparam) {
+                            $report['reportparam_id'] = $reportparam['id'];
+                            if ($subpaket['reporttype_id'] == $reportparam['reporttype_id']) {
+                                if ($reportparam['reporttype_id'] == ReportType::getutamaid() && !$isutamacreated) {
+                                    $report['title'] = 'Utama';
+                                    $isutamaoncecreated = true;
+                                    Report::create($report);
+                                } else if ($reportparam['reporttype_id'] == ReportType::getmcid()) {
+                                    $report['title'] = 'MC' . $i;
+                                    Report::create($report);
+                                }
+                            }
+                        }
                     }
                 }
 
                 DB::commit();
                 $this->response_json->status = true;
                 $this->response_json->message = 'Paket added.';
-            } catch (\Exception $e) {
+            } catch
+            (\Exception $e) {
                 DB::rollback();
                 $this->response_json->message = $e->getMessage();
             }
@@ -147,7 +185,8 @@ class PaketController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request)
+    public
+    function update(Request $request)
     {
         if ($this->isPost()) {
 
@@ -157,8 +196,8 @@ class PaketController extends Controller
              * @todo validate request
              */
             $rules = array(
-                'title'=> 'required',
-                'year'=> 'required'
+                'title' => 'required',
+                'year' => 'required'
             );
 
             if (null !== $this->validate_v2($request, $rules)) {
@@ -191,7 +230,8 @@ class PaketController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public function delete(Request $request)
+    public
+    function delete(Request $request)
     {
         if ($this->isPost()) {
             try {
@@ -210,7 +250,9 @@ class PaketController extends Controller
      * '
      * @return \Illuminate\Http\JsonResponse
      */
-    public function get() {
+    public
+    function get()
+    {
         if ($this->isPost()) {
             $pakets = Paket::all();
             $this->response_json->status = true;
@@ -225,9 +267,11 @@ class PaketController extends Controller
      * @param int $ppk_id
      * @return \Illuminate\Http\JsonResponse
      */
-    public function getbyppk($ppk_id) {
+    public
+    function getbyppk($ppk_id)
+    {
         if ($this->isPost()) {
-            $kontrakmodel = new Kontrak();
+            $kontrakmodel = new PPKAppointment();
             $paketmodel = new Paket();
             $kontraks = $kontrakmodel->where('ppk_id', '=', $ppk_id)->get();
             foreach ($kontraks as $index => $value) {
@@ -240,7 +284,9 @@ class PaketController extends Controller
         }
     }
 
-    public function getsubpaket($paket_id) {
+    public
+    function getsubpaket($paket_id)
+    {
         if ($this->isPost()) {
             $subpakets = SubPaket::where('paket_id', '=', $paket_id)->get();
             $this->response_json->data = $subpakets;
@@ -249,7 +295,9 @@ class PaketController extends Controller
         }
     }
 
-    public function getyear() {
+    public
+    function getyear()
+    {
         if ($this->isPost()) {
             $paketmodel = new Paket();
             $startyear = $paketmodel->orderBy('startyear', 'asc')->get(['startyear'])->first();
@@ -257,6 +305,17 @@ class PaketController extends Controller
             $years['startyear'] = $startyear['startyear'];
             $years['endyear'] = $endyear['endyear'];
             $this->response_json->data = $years;
+            $this->response_json->status = true;
+            return $this->__json();
+        }
+    }
+
+    public
+    function getppkbyyear($year)
+    {
+        if ($this->isPost()) {
+            $pakets = Paket::where('startyear', '<=', $year)->where('endyear', '>=', $year)->get();
+            $this->response_json->data = $pakets;
             $this->response_json->status = true;
             return $this->__json();
         }
