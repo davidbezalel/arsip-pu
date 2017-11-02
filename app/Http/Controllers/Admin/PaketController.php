@@ -8,6 +8,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Model\Admin;
 use App\Model\PPKAppointment;
 use App\Model\Paket;
 use App\Model\Report;
@@ -32,17 +33,24 @@ class PaketController extends Controller
         if ($this->isPost()) {
             $paketModel = new Paket();
             $subpaketmodel = new SubPaket();
+            $adminid = Auth::user()->id;
+            $admin = Admin::find($adminid);
 
-            $columns = ['no', 'title', 'startyear', 'created_at'];
+            $columns = ['no', 'title', 'startyear', 'paket.created_at'];
             $where = array(
-                ['title', 'LIKE', '%' . $request['search']['value'] . '%']
+                ['title', 'LIKE', '%' . $request['search']['value'] . '%'],
+                ['admin.satker_id', '=', $admin->satker_id]
+            );
+
+            $join = array(
+                ['admin', 'paket.admin_id', '=', 'admin.id']
             );
 
             if ($request['year'] > 0) {
                 $where[] = ['startyear', '<=', (int)$request['year']];
                 $where[] = ['endyear', '>=', (int)$request['year']];
             }
-            $pakets = $paketModel->find_v2($where, true, ['*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir']);
+            $pakets = $paketModel->find_v2($where, true, ['*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir'], $join);
             $number = intval($request['start']) + 1;
             foreach ($pakets as &$item) {
                 $item['no'] = $number;
@@ -52,8 +60,8 @@ class PaketController extends Controller
             $response_json = array();
             $response_json['draw'] = $request['draw'];
             $response_json['data'] = $pakets;
-            $response_json['recordsTotal'] = $paketModel->getTableCount($where);
-            $response_json['recordsFiltered'] = $paketModel->getTableCount($where);
+            $response_json['recordsTotal'] = $paketModel->getTableCount($where, $join);
+            $response_json['recordsFiltered'] = $paketModel->getTableCount($where, $join);
             return $this->__json($response_json);
         }
         $styles = array();
@@ -254,7 +262,13 @@ class PaketController extends Controller
     function get()
     {
         if ($this->isPost()) {
-            $pakets = Paket::all();
+            $paketmodel = new Paket();
+            $adminid = Auth::user()->id;
+            $admin = Admin::find($adminid);
+            $pakets = $paketmodel->join('admin', 'admin.id', '=', 'paket.admin_id')
+                ->join('admin', 'admin.id', '=', 'paket.admin_id')
+                ->where('admin.satker_id', '=', $admin->satker_id)
+                ->get(['*']);
             $this->response_json->status = true;
             $this->response_json->data = $pakets;
             return $this->__json();
@@ -273,7 +287,12 @@ class PaketController extends Controller
         if ($this->isPost()) {
             $kontrakmodel = new PPKAppointment();
             $paketmodel = new Paket();
-            $kontraks = $kontrakmodel->where('ppk_id', '=', $ppk_id)->get();
+            $adminid = Auth::user()->id;
+            $admin = Admin::find($adminid);
+            $kontraks = $kontrakmodel->join('admin', 'admin.id', '=', 'paket.admin_id')
+                ->where('ppk_id', '=', $ppk_id)
+                ->where('admin.satker_id', '=', $admin->satker_id)
+                ->get();
             foreach ($kontraks as $index => $value) {
                 $paket = $paketmodel->find($value['paket_id']);
                 $value['paket'] = $paket;
@@ -300,8 +319,14 @@ class PaketController extends Controller
     {
         if ($this->isPost()) {
             $paketmodel = new Paket();
-            $startyear = $paketmodel->orderBy('startyear', 'asc')->get(['startyear'])->first();
-            $endyear = $paketmodel->orderBy('endyear', 'desc')->get(['endyear'])->first();
+            $adminid = Auth::user()->id;
+            $admin = Admin::find($adminid);
+            $startyear = $paketmodel->join('admin', 'admin.id', '=', 'paket.admin_id')
+                ->where('admin.satker_id', '=', $admin->satker_id)
+                ->orderBy('startyear', 'asc')->get(['startyear'])->first();
+            $endyear = $paketmodel->join('admin', 'admin.id', '=', 'paket.admin_id')
+                ->where('admin.satker_id', '=', $admin->satker_id)
+                ->orderBy('endyear', 'desc')->get(['endyear'])->first();
             $years['startyear'] = $startyear['startyear'];
             $years['endyear'] = $endyear['endyear'];
             $this->response_json->data = $years;
@@ -314,7 +339,12 @@ class PaketController extends Controller
     function getppkbyyear($year)
     {
         if ($this->isPost()) {
-            $pakets = Paket::where('startyear', '<=', $year)->where('endyear', '>=', $year)->get();
+            $paketmodel = new Paket();
+            $adminid = Auth::user()->id;
+            $admin = Admin::find($adminid);
+            $pakets = $paketmodel->join('admin', 'admin.id', '=', 'paket.admin_id')
+                ->where('admin.satker_id', '=', $admin->satker_id)
+                ->where('startyear', '<=', $year)->where('endyear', '>=', $year)->get();
             $this->response_json->data = $pakets;
             $this->response_json->status = true;
             return $this->__json();

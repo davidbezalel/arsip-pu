@@ -59,7 +59,8 @@ jQuery(document).ready(function () {
                     $('#content').empty().append(_html);
                     $.each(_data, function (index, value) {
                         if (value.isfilesubmitted == 0) {
-                            _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-danger btn-flat">Berkas Belum diserahkan</button >';
+                            // _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-danger btn-flat">Berkas Belum diserahkan</button >';
+                            _action = '<input type="file" id="serahkan" data-report="' + value.id + '" name="filesubmitted" class="btn btn-danger"></input>';
                         } else if (value.isfilesubmitted == 1 && value.isavailable == 1) {
                             _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.filesubmissionid + '" class="btn btn-success btn-flat">Berkas Lengkap</button >';
                         } else if (value.isfilesubmitted == 1 && value.isavailable == 0) {
@@ -243,13 +244,19 @@ jQuery(document).ready(function () {
     });
 
 
-    $(document).on('click', '#serahkan', function (event) {
+    $(document).on('change', '#serahkan', function (event) {
         if (confirm('Apakah anda yakin berkas yang diserahkan telah lengkap?')) {
-            var _data = 'report_id=' + $(this).attr('data-report');
+            $('error').hide();
+            var _data = new FormData();
+            _data.append('reportid', $(this).attr('data-report'));
+            _data.append('filesubmitted', $('#serahkan')[0].files[0]);
+
             $.ajax({
                 url: '/admin/laporan/report',
                 type: 'POST',
                 data: _data,
+                processData: false,
+                contentType: false,
                 headers: {'X-CSRF-TOKEN': token},
                 success: function (data) {
                     if (data.status) {
@@ -258,6 +265,8 @@ jQuery(document).ready(function () {
                         } else if ($('#subpaketname').val() != null && $('#paketname').val() != null) {
                             makemcreport($('#subpaketname').val());
                         }
+                    } else {
+                        $('#error').empty().append(data.message).show();
                     }
                 }
             });
@@ -266,6 +275,7 @@ jQuery(document).ready(function () {
 
     $(document).on('click', '#pinjam', function (event) {
         if (confirm('Apakah anda yakin berkas yang dipinjam telah lengkap?')) {
+            $('error').hide();
             var _data = 'report_id=' + $(this).attr('data-report') + '&filesubmissionid=' + $(this).attr('data-document-report');
             $.ajax({
                 url: '/admin/laporan/pinjam',
@@ -286,6 +296,7 @@ jQuery(document).ready(function () {
     });
 
     $(document).on('click', '#kembalikan', function (event) {
+        $('error').hide();
         if (confirm('Apakah anda yakin berkas yang dikembaliakan telah lengkap?')) {
             var _data = 'report_id=' + $(this).attr('data-report') + '&loanfileid=' + $(this).attr('data-peminjaman-berkas');
             $.ajax({

@@ -8,6 +8,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Model\Admin;
 use App\Model\PPK;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -25,20 +26,27 @@ class PPKController extends Controller
     {
         if ($this->isPost()) {
             $ppkModel = new PPK();
+            $adminid = Auth::user()->id;
+            $admin = Admin::find($adminid);
 
-            $columns = ['no', 'ppkid', 'name', 'year', 'created_at'];
+            $columns = ['no', 'ppkid', 'ppk.name', 'ppk.year', 'ppk.created_at'];
             $where = array(
                 ['isactive', '=', '1',],
+                ['admin.satker_id', '=', $admin->satker_id],
                 ['ppkid', 'LIKE', '%' . $request['search']['value'] . '%', 'AND ('],
-                ['name', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
-                ['id', '>', '0', ') AND']
+                ['ppk.name', 'LIKE', '%' . $request['search']['value'] . '%', 'OR'],
+                ['ppk.id', '>', '0', ') AND']
+            );
+
+            $join = array(
+                ['admin', 'admin.id', '=', 'ppk.admin_id']
             );
 
             if ($request['year'] > 0) {
                 $where[] = ['year', '=', $request['year']];
             }
 
-            $ppks = $ppkModel->find_v2($where, true, ['*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir']);
+            $ppks = $ppkModel->find_v2($where, true, ['ppk.*', 'admin.satker_id', 'admin.name as adminname'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir'], $join);
             $number = intval($request['start']) + 1;
             foreach ($ppks as &$item) {
                 $item['no'] = $number;
@@ -47,8 +55,8 @@ class PPKController extends Controller
             $response_json = array();
             $response_json['draw'] = $request['draw'];
             $response_json['data'] = $ppks;
-            $response_json['recordsTotal'] = $ppkModel->getTableCount($where);
-            $response_json['recordsFiltered'] = $ppkModel->getTableCount($where);
+            $response_json['recordsTotal'] = $ppkModel->getTableCount($where, $join);
+            $response_json['recordsFiltered'] = $ppkModel->getTableCount($where, $join);
             return $this->__json($response_json);
         }
         $styles = array();

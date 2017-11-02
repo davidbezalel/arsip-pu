@@ -95,15 +95,29 @@ class ReportController extends Controller
                 /**
                  * @todo document_report: insert
                  */
+                $_file = $request->file('filesubmitted');
+                $_path = 'assets/arsips';
+                if (!$_file->isValid()) {
+                    $this->response_json->message = 'File is corrupted';
+                    return $this->__json();
+                }
+
+                if ($_file->getClientOriginalExtension() != 'pdf') {
+                    $this->response_json->message = 'File must be a .pdf file';
+                    return $this->__json();
+                }
+
+                $_file->move($_path, $_file->getClientOriginalName());
+
                 $data = array();
-                $data['report_id'] = (int)$request['report_id'];
+                $data['report_id'] = (int)$request->reportid;
                 $data['handledby'] = Auth::user()->id;
                 FileSubmission::create($data);
 
                 /**
                  * @todo report: update (is_reported = 1; is_available = 1)
                  */
-                $report = Report::find((int)$request['report_id']);
+                $report = Report::find((int)$request->reportid);
                 $report['isfilesubmitted'] = 1;
                 $report['isavailable'] = 1;
                 $report->update();
