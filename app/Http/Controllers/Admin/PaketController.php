@@ -344,7 +344,7 @@ class PaketController extends Controller
             $admin = Admin::find($adminid);
             $pakets = $paketmodel->join('admin', 'admin.id', '=', 'paket.admin_id')
                 ->where('admin.satker_id', '=', $admin->satker_id)
-                ->where('startyear', '<=', $year)->where('endyear', '>=', $year)->get();
+                ->where('startyear', '<=', $year)->where('endyear', '>=', $year)->get(['paket.*', 'admin.id as adminid']);
             $this->response_json->data = $pakets;
             $this->response_json->status = true;
             return $this->__json();

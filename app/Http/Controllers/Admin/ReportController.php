@@ -10,8 +10,10 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Model\FileSubmission;
 use App\Model\LoanFile;
+use App\Model\Paket;
 use App\Model\ReLoanFile;
 use App\Model\Report;
+use App\Model\SubPaket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -70,7 +72,7 @@ class ReportController extends Controller
                 ->where('subpaket.paket_id', '=', $paketid)
                 ->where('subpaket.reporttype_id', '=', 1)
                 ->orderBy('report.id', 'asc')
-                ->get(['report.*', 'reportparam.title as reportparamtitle', 'filesubmission.id as filesubmissionid', 'loanfile.id as loanfileid']);
+                ->get(['report.*', 'reportparam.title as reportparamtitle', 'filesubmission.id as filesubmissionid', 'filesubmission.filepath as filepath', 'loanfile.id as loanfileid']);
             $this->response_json->status = true;
             $this->response_json->data = $reports;
             return $this->__json();
@@ -96,7 +98,6 @@ class ReportController extends Controller
                  * @todo document_report: insert
                  */
                 $_file = $request->file('filesubmitted');
-                $_path = 'assets/arsips';
                 if (!$_file->isValid()) {
                     $this->response_json->message = 'File is corrupted';
                     return $this->__json();
@@ -107,11 +108,21 @@ class ReportController extends Controller
                     return $this->__json();
                 }
 
+                $reportmodel = new Report();
+                $subpaketmodel = new SubPaket();
+                $paketmodel = new Paket();
+
+                $report = $reportmodel->find($request->reportid);
+                $subpaket = $subpaketmodel->find($report->subpaket_id);
+                $paket = $paketmodel->find($subpaket->paket_id);
+
+                $_path = 'assets/arsips/' . $paket->title;
                 $_file->move($_path, $_file->getClientOriginalName());
 
                 $data = array();
                 $data['report_id'] = (int)$request->reportid;
                 $data['handledby'] = Auth::user()->id;
+                $data['filepath'] = $_path . '/' . $_file->getClientOriginalName();
                 FileSubmission::create($data);
 
                 /**

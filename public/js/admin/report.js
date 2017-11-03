@@ -59,7 +59,6 @@ jQuery(document).ready(function () {
                     $('#content').empty().append(_html);
                     $.each(_data, function (index, value) {
                         if (value.isfilesubmitted == 0) {
-                            // _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-danger btn-flat">Berkas Belum diserahkan</button >';
                             _action = '<input type="file" id="serahkan" data-report="' + value.id + '" name="filesubmitted" class="btn btn-danger"></input>';
                         } else if (value.isfilesubmitted == 1 && value.isavailable == 1) {
                             _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.filesubmissionid + '" class="btn btn-success btn-flat">Berkas Lengkap</button >';
@@ -68,7 +67,7 @@ jQuery(document).ready(function () {
                         }
                         _tr = '<tr>' +
                             '       <td>' + value.reportparamtitle + '</td>' +
-                            '       <td style="text-align: right;"><i class="fa ' + (value.isfilesubmitted == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
+                            '       <td style="text-align: right;">' + (value.isfilesubmitted == 0 ? '<i class="fa fa-remove"></i>' : '<a download="Main_' + value.reportparamtitle + '.pdf" href="/' + value.filepath + '">Download</a>') + '</td>' +
                             '       <td style="text-align: right;"><i class="fa ' + (value.isavailable == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
                             '       <td style="text-align: right;">' + _action + '</td>' +
                             '</tr>';
@@ -152,7 +151,7 @@ jQuery(document).ready(function () {
 
                     $.each(_data, function (index, value) {
                         if (value.isfilesubmitted == 0) {
-                            _action = '<button id="serahkan" data-report="' + value.id + '" class="btn btn-danger btn-flat">Berkas Belum diserahkan</button >';
+                            _action = '<input type="file" id="serahkan" data-report="' + value.id + '" name="filesubmitted" class="btn btn-danger"></input>';
                         } else if (value.isfilesubmitted == 1 && value.isavailable == 1) {
                             _action = '<button id="pinjam" data-report="' + value.id + '" data-document-report="' + value.filesubmissionid + '" class="btn btn-success btn-flat">Berkas Lengkap</button >';
                         } else if (value.isfilesubmitted == 1 && value.isavailable == 0) {
