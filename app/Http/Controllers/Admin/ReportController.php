@@ -54,7 +54,7 @@ class ReportController extends Controller
                 ->where('subpaket.id', '=', $paketid)
                 ->where('subpaket.reporttype_id', '=', 2)
                 ->orderBy('report.id', 'asc')
-                ->get(['report.*', 'reportparam.title as reportparamtitle', 'filesubmission.id as filesubmissionid', 'loanfile.id as loanfileid']);
+                ->get(['report.*', 'reportparam.title as reportparamtitle', 'filesubmission.id as filesubmissionid', 'filesubmission.filepath as filepath', 'loanfile.id as loanfileid']);
             $this->response_json->status = true;
             $this->response_json->data = $reports;
             return $this->__json();
@@ -98,6 +98,7 @@ class ReportController extends Controller
                  * @todo document_report: insert
                  */
                 $_file = $request->file('filesubmitted');
+                var_dump($request->reportid);exit;
                 if (!$_file->isValid()) {
                     $this->response_json->message = 'File is corrupted';
                     return $this->__json();

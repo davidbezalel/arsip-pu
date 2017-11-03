@@ -116,7 +116,6 @@ jQuery(document).ready(function () {
                         '        </div>';
                     $('#content').empty().append(_html);
                     $.each(_data, function (index, value) {
-                        console.log(value.title, _title);
                         if (value.title != _title) {
                             var _html = '<div class="row">' +
                                 '            <div class="col-md-12">' +
@@ -159,7 +158,7 @@ jQuery(document).ready(function () {
                         }
                         _tr = '<tr>' +
                             '       <td>' + value.reportparamtitle + '</td>' +
-                            '       <td style="text-align: right;"><i class="fa ' + (value.isfilesubmitted == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
+                            '       <td style="text-align: right;">' + (value.isfilesubmitted == 0 ? '<i class="fa fa-remove"></i>' : '<a download="Main_' + value.reportparamtitle + '.pdf" href="/' + value.filepath + '">Download</a>') + '</td>' +
                             '       <td style="text-align: right;"><i class="fa ' + (value.isavailable == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
                             '       <td style="text-align: right;">' + _action + '</td>' +
                             '</tr>';
@@ -248,8 +247,8 @@ jQuery(document).ready(function () {
             $('error').hide();
             var _data = new FormData();
             _data.append('reportid', $(this).attr('data-report'));
-            _data.append('filesubmitted', $('#serahkan')[0].files[0]);
-
+            // _data.append('filesubmitted', $(this)[0].files[0]);
+            //
             $.ajax({
                 url: '/admin/laporan/report',
                 type: 'POST',
