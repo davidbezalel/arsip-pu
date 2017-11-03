@@ -245,10 +245,11 @@ jQuery(document).ready(function () {
     $(document).on('change', '#serahkan', function (event) {
         if (confirm('Apakah anda yakin berkas yang diserahkan telah lengkap?')) {
             $('error').hide();
+
             var _data = new FormData();
             _data.append('reportid', $(this).attr('data-report'));
-            // _data.append('filesubmitted', $(this)[0].files[0]);
-            //
+            _data.append('filesubmitted', $(this)[0].files[0]);
+
             $.ajax({
                 url: '/admin/laporan/report',
                 type: 'POST',

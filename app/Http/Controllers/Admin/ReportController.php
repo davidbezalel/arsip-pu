@@ -98,7 +98,6 @@ class ReportController extends Controller
                  * @todo document_report: insert
                  */
                 $_file = $request->file('filesubmitted');
-                var_dump($request->reportid);exit;
                 if (!$_file->isValid()) {
                     $this->response_json->message = 'File is corrupted';
                     return $this->__json();
