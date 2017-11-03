@@ -39,7 +39,7 @@
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>PU</b></span>
             <!-- logo for regular state and mobile devices -->
-            <span class="logo-lg"><b>PU</b> Wilayah I</span>
+            <span class="logo-lg"><b>PU</b> {{ App\Model\Admin::find(Auth::user()->id)->satker->name }}</span>
         </a>
         <!-- Header Navbar: style can be found in header.less -->
         <nav class="navbar navbar-static-top">
@@ -93,11 +93,6 @@
                 </li>
 
                 {{-- Penunjukan PPK menu --}}
-                <li class="<?php echo($data['controller'] == 'kontrak' ? 'active' : ''); ?> treeview">
-                    <a href="/admin/ppkappointment">
-                        <i class="fa"><span class="fa fa-thumbs-up"></span></i> <span>Penunjukan PPK</span>
-                    </a>
-                </li>
 
                 {{-- Laporan menu --}}
                 <li class="<?php echo($data['controller'] == 'report' ? 'active' : ''); ?> treeview">

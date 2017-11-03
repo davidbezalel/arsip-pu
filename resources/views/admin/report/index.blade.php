@@ -13,13 +13,6 @@
                     <div class="box-body">
                         <form action="" id="reportfilteringform" class="form-horizontal">
                             <div class="alert redalert" id="error"></div>
-                            {{--<div class="form-group">--}}
-                            {{--<label for="ppk_id" class="col-md-2 control-label">PPK</label>--}}
-                            {{--<div class="col-md-5">--}}
-                            {{--<select id="ppkname" class="form-control js-example-basic-single" name="ppk_id">--}}
-                            {{--<option value="0" selected disabled>Silahkan pilih PPK.</option>--}}
-                            {{--</select>--}}
-                            {{--</div>--}}
                             <div class="form-group">
                                 <label for="year" class="col-md-2 control-label">Tahun</label>
                                 <div class="col-md-5">

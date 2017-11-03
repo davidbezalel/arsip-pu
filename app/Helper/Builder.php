@@ -50,6 +50,7 @@ class Builder extends BaseBuilder
         $query = $this->where($where)
             ->orderBy($orderBy, $rulesOrder);
 
+
         if ($limit != 0) {
             $query->limit($limit)
                 ->offset($offset);
