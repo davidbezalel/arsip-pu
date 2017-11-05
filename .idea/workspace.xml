@@ -2,6 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="5dfc5040-8230-4af7-a2af-50ef43704ee6" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/Http/Controllers/Admin/ReportController.php" afterPath="$PROJECT_DIR$/app/Http/Controllers/Admin/ReportController.php" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/public/js/admin/report.js" afterPath="$PROJECT_DIR$/public/js/admin/report.js" />
     </list>
@@ -21,7 +23,7 @@
       <file leaf-file-name="routes.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="795">
+            <state relative-caret-position="362">
               <caret line="62" column="33" lean-forward="false" selection-start-line="62" selection-start-column="33" selection-end-line="62" selection-end-column="33" />
               <folding />
             </state>
@@ -31,16 +33,26 @@
       <file leaf-file-name="report.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/admin/report.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="167">
-              <caret line="246" column="30" lean-forward="false" selection-start-line="246" selection-start-column="30" selection-end-line="246" selection-end-column="30" />
+            <state relative-caret-position="498">
+              <caret line="177" column="23" lean-forward="true" selection-start-line="177" selection-start-column="23" selection-end-line="177" selection-end-column="23" />
               <folding>
-                <marker date="1509691000448" expanded="true" signature="4008:4026" ph="..." />
-                <marker date="1509691000448" expanded="true" signature="4255:4273" ph="..." />
-                <marker date="1509691000448" expanded="true" signature="4409:4427" ph="..." />
-                <marker date="1509691000448" expanded="true" signature="10400:10418" ph="..." />
-                <marker date="1509691000448" expanded="true" signature="10647:10665" ph="..." />
-                <marker date="1509691000448" expanded="true" signature="10801:10819" ph="..." />
+                <marker date="1509875719199" expanded="true" signature="4009:4027" ph="..." />
+                <marker date="1509875719199" expanded="true" signature="4221:4239" ph="..." />
+                <marker date="1509875719199" expanded="true" signature="4375:4393" ph="..." />
+                <marker date="1509875719199" expanded="true" signature="10366:10384" ph="..." />
+                <marker date="1509875719199" expanded="true" signature="10578:10596" ph="..." />
+                <marker date="1509875719199" expanded="true" signature="10732:10750" ph="..." />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name=".gitignore" pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/.gitignore">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="45">
+              <caret line="3" column="21" lean-forward="false" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
+              <folding />
             </state>
           </provider>
         </entry>
@@ -58,28 +70,18 @@
       <file leaf-file-name="paket.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/public/js/admin/paket.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="735">
+            <state relative-caret-position="15">
               <caret line="49" column="33" lean-forward="false" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="index.blade.php" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/resources/views/admin/report/index.blade.php">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="210">
-              <caret line="14" column="62" lean-forward="false" selection-start-line="14" selection-start-column="62" selection-end-line="14" selection-end-column="62" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ReportController.php" pinned="false" current-in-tab="true">
+      <file leaf-file-name="ReportController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/ReportController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="137">
-              <caret line="99" column="0" lean-forward="false" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+            <state relative-caret-position="255">
+              <caret line="128" column="32" lean-forward="false" selection-start-line="128" selection-start-column="32" selection-end-line="128" selection-end-column="32" />
               <folding />
             </state>
           </provider>
@@ -88,7 +90,7 @@
       <file leaf-file-name="PaketController.php" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/PaketController.php">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="557">
+            <state relative-caret-position="4980">
               <caret line="346" column="120" lean-forward="false" selection-start-line="346" selection-start-column="120" selection-end-line="346" selection-end-column="120" />
               <folding>
                 <marker date="1509678202743" expanded="true" signature="10715:10811" ph="..." />
@@ -161,7 +163,6 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/app/Model/Developer.php" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Controller.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/login.blade.php" />
         <option value="$PROJECT_DIR$/resources/views/admin/register.blade.php" />
@@ -210,8 +211,9 @@
         <option value="$PROJECT_DIR$/app/Model/FileSubmission.php" />
         <option value="$PROJECT_DIR$/public/js/admin/paket.js" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/PaketController.php" />
-        <option value="$PROJECT_DIR$/public/js/admin/report.js" />
         <option value="$PROJECT_DIR$/app/Http/Controllers/Admin/ReportController.php" />
+        <option value="$PROJECT_DIR$/public/js/admin/report.js" />
+        <option value="$PROJECT_DIR$/.gitignore" />
       </list>
     </option>
   </component>
@@ -286,7 +288,7 @@
     <property name="settings.editor.selected.configurable" value="editor.preferences.fonts.default" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="last_opened_file_path" value="/media/davidbezalellaoli/Kampus/nesiaproject/inGO/inGOrestapi" />
-    <property name="SearchEverywhereHistoryKey" value="admin_&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/layouts/admin_master.blade.php&#10;reportcon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/ReportController.php&#10;routes&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/routes.php&#10;paketcon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PaketController.php&#10;paket.js&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/paket.js&#10;filesu&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/FileSubmission.php&#10;report&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/Report.php&#10;report/index&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/report/index.blade.php&#10;report.js&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/report.js&#10;report/inde&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/report/index.blade.php&#10;user&#9;null&#9;null&#10;adminmas&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/layouts/admin_master.blade.php&#10;admin&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/layouts/admin_master.blade.php&#10;paket&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PaketController.php&#10;ppkcontr&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PPKController.php&#10;routes.ph&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/routes.php&#10;.blade&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/report/index.blade.php&#10;ppkcont&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PPKController.php&#10;verif&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Middleware/VerifyCsrfToken.php&#10;auth.js&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/auth.js&#10;maincon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/MainController.php&#10;routes.&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/routes.php&#10;view&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/config/view.php&#10;kernel&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/vendor/laravel/framework/src/Illuminate/Contracts/Http/Kernel.php&#10;env&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/.env&#10;.env&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/.env&#10;database.ph&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/config/database.php&#10;composer.json&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/composer.json&#10;index.php&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/index.php&#10;reportclass&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/ReportClassificationController.php&#10;report/ind&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/report/index.blade.php&#10;repor&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/Report.php&#10;reportty&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/ReportType.php&#10;kontrak&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/kontrak.js&#10;kontrakcon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/KontrakController.php&#10;ppkjs&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/ppk.js&#10;subpaket&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/SubPaket.php&#10;paket.php&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/Paket.php&#10;style&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/css/style.css&#10;paket/ind&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/paket/index.blade.php&#10;csrf&#9;null&#9;null&#10;master&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/layouts/admin_master.blade.php&#10;authen&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Middleware/AuthenticationChecking.php&#10;auth.php&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/config/auth.php&#10;Maincon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/MainController.php&#10;ppk.js&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/ppk.js&#10;ppk/index&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/ppk/index.blade.php&#10;ppk&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PPKController.php&#10;pengem&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/PengembalianBerkas.php&#10;pemi&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/PeminjamanBerkas.php" />
+    <property name="SearchEverywhereHistoryKey" value=".gitig&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/.gitignore&#10;admin_&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/layouts/admin_master.blade.php&#10;reportcon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/ReportController.php&#10;routes&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/routes.php&#10;paketcon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PaketController.php&#10;paket.js&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/paket.js&#10;filesu&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/FileSubmission.php&#10;report&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/Report.php&#10;report/index&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/report/index.blade.php&#10;report.js&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/report.js&#10;report/inde&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/report/index.blade.php&#10;user&#9;null&#9;null&#10;adminmas&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/layouts/admin_master.blade.php&#10;admin&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/layouts/admin_master.blade.php&#10;paket&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PaketController.php&#10;ppkcontr&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PPKController.php&#10;routes.ph&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/routes.php&#10;.blade&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/report/index.blade.php&#10;ppkcont&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PPKController.php&#10;verif&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Middleware/VerifyCsrfToken.php&#10;auth.js&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/auth.js&#10;maincon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/MainController.php&#10;routes.&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/routes.php&#10;view&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/config/view.php&#10;kernel&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/vendor/laravel/framework/src/Illuminate/Contracts/Http/Kernel.php&#10;env&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/.env&#10;.env&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/.env&#10;database.ph&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/config/database.php&#10;composer.json&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/composer.json&#10;index.php&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/index.php&#10;reportclass&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/ReportClassificationController.php&#10;report/ind&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/report/index.blade.php&#10;repor&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/Report.php&#10;reportty&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/ReportType.php&#10;kontrak&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/kontrak.js&#10;kontrakcon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/KontrakController.php&#10;ppkjs&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/ppk.js&#10;subpaket&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/SubPaket.php&#10;paket.php&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/Paket.php&#10;style&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/css/style.css&#10;paket/ind&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/paket/index.blade.php&#10;csrf&#9;null&#9;null&#10;master&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/layouts/admin_master.blade.php&#10;authen&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Middleware/AuthenticationChecking.php&#10;auth.php&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/config/auth.php&#10;Maincon&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/MainController.php&#10;ppk.js&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/public/js/admin/ppk.js&#10;ppk/index&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/resources/views/admin/ppk/index.blade.php&#10;ppk&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Http/Controllers/Admin/PPKController.php&#10;pengem&#9;FILE&#9;file:///home/davidbezalellaoli/project/arsip/app/Model/PengembalianBerkas.php" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
@@ -431,14 +433,16 @@
       <workItem from="1509610896771" duration="8582000" />
       <workItem from="1509673566069" duration="3914000" />
       <workItem from="1509680989000" duration="7350000" />
+      <workItem from="1509873754383" duration="2065000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="177353000" />
+    <option name="totallyTimeSpent" value="179418000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="-1" width="1366" height="742" extended-state="6" />
+    <frame x="0" y="0" width="1366" height="742" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info id="Gulp" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="2" side_tool="true" content_ui="tabs" />
       <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2489019" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
@@ -473,7 +477,6 @@
     <watches-manager />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/Model/PaketYear.php" />
     <entry file="file://$PROJECT_DIR$/public/js/admin/ppk.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="15">
@@ -725,39 +728,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="225">
           <caret line="31" column="81" lean-forward="false" selection-start-line="31" selection-start-column="81" selection-end-line="31" selection-end-column="81" />
-          <folding>
-            <element signature="e#323#496#0#PHP" expanded="false" />
-            <element signature="e#1257#1358#0#PHP" expanded="false" />
-            <element signature="e#1677#1784#0#PHP" expanded="false" />
-            <element signature="e#2486#2681#0#PHP" expanded="false" />
-            <element signature="e#2810#2867#0#PHP" expanded="false" />
-            <element signature="e#2889#3007#0#PHP" expanded="false" />
-            <element signature="e#3022#3214#0#PHP" expanded="false" />
-            <element signature="e#3228#3280#0#PHP" expanded="false" />
-            <element signature="e#3726#3943#0#PHP" expanded="false" />
-            <element signature="e#3948#5424#0#PHP" expanded="false" />
-            <element signature="e#4003#5418#0#PHP" expanded="false" />
-            <element signature="e#4075#4132#0#PHP" expanded="false" />
-            <element signature="e#4154#4250#0#PHP" expanded="false" />
-            <element signature="e#4265#4457#0#PHP" expanded="false" />
-            <element signature="e#4480#4596#0#PHP" expanded="false" />
-            <element signature="e#4610#4771#0#PHP" expanded="false" />
-            <element signature="e#4785#4837#0#PHP" expanded="false" />
-            <element signature="e#4850#5372#0#PHP" expanded="false" />
-            <element signature="e#4928#5045#0#PHP" expanded="false" />
-            <element signature="e#5262#5372#0#PHP" expanded="false" />
-            <element signature="e#5430#5557#0#PHP" expanded="false" />
-            <element signature="e#5562#6004#0#PHP" expanded="false" />
-            <element signature="e#5617#5998#0#PHP" expanded="false" />
-            <element signature="e#5652#5952#0#PHP" expanded="false" />
-            <element signature="e#5842#5952#0#PHP" expanded="false" />
-            <element signature="e#6011#6102#0#PHP" expanded="false" />
-            <element signature="e#6107#6342#0#PHP" expanded="false" />
-            <element signature="e#6139#6336#0#PHP" expanded="false" />
-            <element signature="e#6348#6447#0#PHP" expanded="false" />
-            <element signature="e#6452#6710#0#PHP" expanded="false" />
-            <element signature="e#6488#6704#0#PHP" expanded="false" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -796,14 +766,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/resources/views/admin/report/index.blade.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="210">
-          <caret line="14" column="62" lean-forward="false" selection-start-line="14" selection-start-column="62" selection-end-line="14" selection-end-column="62" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Model/Report.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
@@ -812,26 +774,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/admin/paket.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="735">
-          <caret line="49" column="33" lean-forward="false" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/Model/FileSubmission.php">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="165">
           <caret line="11" column="65" lean-forward="false" selection-start-line="11" selection-start-column="65" selection-end-line="11" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="795">
-          <caret line="62" column="33" lean-forward="false" selection-start-line="62" selection-start-column="33" selection-end-line="62" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -846,7 +792,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/PaketController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="557">
+        <state relative-caret-position="4980">
           <caret line="346" column="120" lean-forward="false" selection-start-line="346" selection-start-column="120" selection-end-line="346" selection-end-column="120" />
           <folding>
             <marker date="1509678202743" expanded="true" signature="10715:10811" ph="..." />
@@ -854,25 +800,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/public/js/admin/report.js">
+    <entry file="file://$PROJECT_DIR$/resources/views/admin/report/index.blade.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="167">
-          <caret line="246" column="30" lean-forward="false" selection-start-line="246" selection-start-column="30" selection-end-line="246" selection-end-column="30" />
-          <folding>
-            <marker date="1509691000448" expanded="true" signature="4008:4026" ph="..." />
-            <marker date="1509691000448" expanded="true" signature="4255:4273" ph="..." />
-            <marker date="1509691000448" expanded="true" signature="4409:4427" ph="..." />
-            <marker date="1509691000448" expanded="true" signature="10400:10418" ph="..." />
-            <marker date="1509691000448" expanded="true" signature="10647:10665" ph="..." />
-            <marker date="1509691000448" expanded="true" signature="10801:10819" ph="..." />
-          </folding>
+        <state relative-caret-position="210">
+          <caret line="14" column="62" lean-forward="false" selection-start-line="14" selection-start-column="62" selection-end-line="14" selection-end-column="62" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/admin/paket.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="15">
+          <caret line="49" column="33" lean-forward="false" selection-start-line="49" selection-start-column="33" selection-end-line="49" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/Http/routes.php">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="362">
+          <caret line="62" column="33" lean-forward="false" selection-start-line="62" selection-start-column="33" selection-end-line="62" selection-end-column="33" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/Http/Controllers/Admin/ReportController.php">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="137">
-          <caret line="99" column="0" lean-forward="false" selection-start-line="99" selection-start-column="0" selection-end-line="99" selection-end-column="0" />
+        <state relative-caret-position="255">
+          <caret line="128" column="32" lean-forward="false" selection-start-line="128" selection-start-column="32" selection-end-line="128" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/public/js/admin/report.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="498">
+          <caret line="177" column="23" lean-forward="true" selection-start-line="177" selection-start-column="23" selection-end-line="177" selection-end-column="23" />
+          <folding>
+            <marker date="1509875719199" expanded="true" signature="4009:4027" ph="..." />
+            <marker date="1509875719199" expanded="true" signature="4221:4239" ph="..." />
+            <marker date="1509875719199" expanded="true" signature="4375:4393" ph="..." />
+            <marker date="1509875719199" expanded="true" signature="10366:10384" ph="..." />
+            <marker date="1509875719199" expanded="true" signature="10578:10596" ph="..." />
+            <marker date="1509875719199" expanded="true" signature="10732:10750" ph="..." />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="45">
+          <caret line="3" column="21" lean-forward="false" selection-start-line="3" selection-start-column="21" selection-end-line="3" selection-end-column="21" />
           <folding />
         </state>
       </provider>

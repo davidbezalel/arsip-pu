@@ -65,9 +65,10 @@ jQuery(document).ready(function () {
                         } else if (value.isfilesubmitted == 1 && value.isavailable == 0) {
                             _action = '<button id="kembalikan" data-report="' + value.id + '" data-peminjaman-berkas="' + value.loanfileid + '" class="btn btn-primary btn-flat">Berkas dipinjam</button >';
                         }
+
                         _tr = '<tr>' +
                             '       <td>' + value.reportparamtitle + '</td>' +
-                            '       <td style="text-align: right;">' + (value.isfilesubmitted == 0 ? '<i class="fa fa-remove"></i>' : '<a download="Main_' + value.reportparamtitle + '.pdf" href="/' + value.filepath + '">Download</a>') + '</td>' +
+                            '       <td style="text-align: right;">' + (value.isfilesubmitted == 0 ? '<i class="fa fa-remove"></i>' : '<a target="_blank" href="/' + value.filepath + '">Download</a>') + '</td>' +
                             '       <td style="text-align: right;"><i class="fa ' + (value.isavailable == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
                             '       <td style="text-align: right;">' + _action + '</td>' +
                             '</tr>';
@@ -158,7 +159,7 @@ jQuery(document).ready(function () {
                         }
                         _tr = '<tr>' +
                             '       <td>' + value.reportparamtitle + '</td>' +
-                            '       <td style="text-align: right;">' + (value.isfilesubmitted == 0 ? '<i class="fa fa-remove"></i>' : '<a download="Main_' + value.reportparamtitle + '.pdf" href="/' + value.filepath + '">Download</a>') + '</td>' +
+                            '       <td style="text-align: right;">' + (value.isfilesubmitted == 0 ? '<i class="fa fa-remove"></i>' : '<a target="_blank" href="/' + value.filepath + '">Download</a>') + '</td>' +
                             '       <td style="text-align: right;"><i class="fa ' + (value.isavailable == 0 ? "fa-remove" : "fa-check") + '"></i></td>' +
                             '       <td style="text-align: right;">' + _action + '</td>' +
                             '</tr>';
@@ -244,8 +245,7 @@ jQuery(document).ready(function () {
 
     $(document).on('change', '#serahkan', function (event) {
         if (confirm('Apakah anda yakin berkas yang diserahkan telah lengkap?')) {
-            $('error').hide();
-
+            $('#error').hide();
             var _data = new FormData();
             _data.append('reportid', $(this).attr('data-report'));
             _data.append('filesubmitted', $(this)[0].files[0]);
