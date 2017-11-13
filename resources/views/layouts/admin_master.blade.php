@@ -91,13 +91,13 @@
                         <i class="fa"><span class="fa fa-cubes"></span></i> <span>Paket</span>
                     </a>
                 </li>
-
+                
                 {{-- Penunjukan PPK menu --}}
-                <li class="<?php echo($data['controller'] == 'kontrak' ? 'active' : ''); ?> treeview">
+                <!-- <li class="<?php echo($data['controller'] == 'kontrak' ? 'active' : ''); ?> treeview">
                     <a href="/admin/ppkappointment">
                         <i class="fa"><span class="fa fa-thumbs-up"></span></i> <span>Penunjukan PPK</span>
                     </a>
-                </li>
+                </li> -->
 
                 {{-- Laporan menu --}}
                 <li class="<?php echo($data['controller'] == 'report' ? 'active' : ''); ?> treeview">
