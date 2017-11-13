@@ -10,8 +10,11 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Model\FileSubmission;
 use App\Model\LoanFile;
+use App\Model\Paket;
 use App\Model\ReLoanFile;
 use App\Model\Report;
+use App\Model\ReportParam;
+use App\Model\SubPaket;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -52,7 +55,7 @@ class ReportController extends Controller
                 ->where('subpaket.id', '=', $paketid)
                 ->where('subpaket.reporttype_id', '=', 2)
                 ->orderBy('report.id', 'asc')
-                ->get(['report.*', 'reportparam.title as reportparamtitle', 'filesubmission.id as filesubmissionid', 'loanfile.id as loanfileid']);
+                ->get(['report.*', 'reportparam.title as reportparamtitle', 'filesubmission.id as filesubmissionid', 'filesubmission.filepath as filepath', 'loanfile.id as loanfileid']);
             $this->response_json->status = true;
             $this->response_json->data = $reports;
             return $this->__json();
@@ -70,7 +73,7 @@ class ReportController extends Controller
                 ->where('subpaket.paket_id', '=', $paketid)
                 ->where('subpaket.reporttype_id', '=', 1)
                 ->orderBy('report.id', 'asc')
-                ->get(['report.*', 'reportparam.title as reportparamtitle', 'filesubmission.id as filesubmissionid', 'loanfile.id as loanfileid']);
+                ->get(['report.*', 'reportparam.title as reportparamtitle', 'filesubmission.id as filesubmissionid', 'filesubmission.filepath as filepath', 'loanfile.id as loanfileid']);
             $this->response_json->status = true;
             $this->response_json->data = $reports;
             return $this->__json();
@@ -95,15 +98,46 @@ class ReportController extends Controller
                 /**
                  * @todo document_report: insert
                  */
+                $_file = $request->file('filesubmitted');
+                if (!$_file->isValid()) {
+                    $this->response_json->message = 'File is corrupted';
+                    return $this->__json();
+                }
+
+                if ($_file->getClientOriginalExtension() != 'pdf' && $_file->getClientOriginalExtension() != 'zip' && $_file->getClientOriginalExtension() != 'rar') {
+                    $this->response_json->message = 'File must be a .pdf or .zip or .rar file';
+                    return $this->__json();
+                }
+
+                $reportmodel = new Report();
+                $subpaketmodel = new SubPaket();
+                $paketmodel = new Paket();
+                $reportparammodel = new ReportParam();
+
+                $report = $reportmodel->find($request->reportid);
+                $subpaket = $subpaketmodel->find($report->subpaket_id);
+                $paket = $paketmodel->find($subpaket->paket_id);
+                $reportparam = $reportparammodel->find($report->reportparam_id);
+
+
+                $_path = 'assets/arsips/' . $paket->title;
+                $_name = $report->title . '_' . $reportparam->title;
+                if ($subpaket->reporttype_id == 2) {
+                    $_name .= '_' . $subpaket->title;
+                }
+                $_name .= '.' . $_file->getClientOriginalExtension();
+                $_file->move($_path, $_name);
+
                 $data = array();
-                $data['report_id'] = (int)$request['report_id'];
+                $data['report_id'] = (int)$request->reportid;
                 $data['handledby'] = Auth::user()->id;
+                $data['filepath'] = $_path . '/' . $_name;
                 FileSubmission::create($data);
 
                 /**
                  * @todo report: update (is_reported = 1; is_available = 1)
                  */
-                $report = Report::find((int)$request['report_id']);
+                $report = Report::find((int)$request->reportid);
                 $report['isfilesubmitted'] = 1;
                 $report['isavailable'] = 1;
                 $report->update();
