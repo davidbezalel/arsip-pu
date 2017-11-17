@@ -15,6 +15,7 @@ jQuery(document).ready(function () {
 
     var drawtable = function () {
         $('#ppk-table').data('year', {year: selectedyear});
+        console.log(selectedyear);
     }
 
     $('#add').click(function (event) {
@@ -56,7 +57,7 @@ jQuery(document).ready(function () {
         var _data = JSON.parse($(this).attr('data-data'));
         $('input[name=ppkid]').val(_data.ppkid);
         $('input[name=name]').val(_data.name);
-        $('input[name=year]').val(_data.year);
+        $('input[name=yearupdate]').val(_data.year);
         $('#update-btn').attr('data-id', _data.id);
 
         $('#error').hide();
@@ -145,9 +146,7 @@ jQuery(document).ready(function () {
             orderable: false,
             className: 'right',
             render: function (data) {
-                return "<a href='' data-data='" + JSON.stringify(data) + "' class='action update'><i class='fa fa-pencil-square-o'></i></a>";
-                    // "<a href='' data-id='" + data.id + "' class='action action-danger delete'><i class='fa fa-trash-o'></i></a>";
-            }
+                return "<a href='' data-data='" + JSON.stringify(data) + "' class='action update'><i class='fa fa-pencil-square-o'></i></a>";            }
         }],
         order: [4, 'DESC']
     });

@@ -54,7 +54,7 @@
                     <div class="form-group">
                         <label for="year" class="col-md-3 control-label">Year</label>
                         <div class="col-md-9">
-                            <input id="year" type="text" name="year" class="form-control" placeholder="eg. 2017">
+                            <input id="yearupdate" type="text" name="yearupdate" class="form-control" placeholder="eg. 2017">
                         </div>
                     </div>
 

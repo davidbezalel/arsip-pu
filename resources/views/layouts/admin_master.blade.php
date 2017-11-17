@@ -36,6 +36,7 @@
 
         <!-- Logo -->
         <a href="/admin/ppk" class="logo">
+            <img style="margin-top: 7px; float: left;" width="35px" height="35px" src="/assets/default_img/a.png">
             <!-- mini logo for sidebar mini 50x50 pixels -->
             <span class="logo-mini"><b>PU</b></span>
             <!-- logo for regular state and mobile devices -->
@@ -91,16 +92,6 @@
                         <i class="fa"><span class="fa fa-cubes"></span></i> <span>Paket</span>
                     </a>
                 </li>
-                
-                {{-- Penunjukan PPK menu --}}
-<<<<<<< HEAD
-                <!-- <li class="<?php echo($data['controller'] == 'kontrak' ? 'active' : ''); ?> treeview">
-                    <a href="/admin/ppkappointment">
-                        <i class="fa"><span class="fa fa-thumbs-up"></span></i> <span>Penunjukan PPK</span>
-                    </a>
-                </li> -->
-=======
->>>>>>> 4a6deebb2f99b7c4f472e9d607933460109fb569
 
                 {{-- Laporan menu --}}
                 <li class="<?php echo($data['controller'] == 'report' ? 'active' : ''); ?> treeview">

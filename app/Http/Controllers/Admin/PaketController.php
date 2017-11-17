@@ -50,7 +50,7 @@ class PaketController extends Controller
                 $where[] = ['startyear', '<=', (int)$request['year']];
                 $where[] = ['endyear', '>=', (int)$request['year']];
             }
-            $pakets = $paketModel->find_v2($where, true, ['*'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir'], $join);
+            $pakets = $paketModel->find_v2($where, true, ['paket.*', 'admin.id as adminid'], intval($request['length']), intval($request['start']), $columns[intval($request['order'][0]['column'])], $request['order'][0]['dir'], $join);
             $number = intval($request['start']) + 1;
             foreach ($pakets as &$item) {
                 $item['no'] = $number;
@@ -193,7 +193,7 @@ class PaketController extends Controller
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
-    public
+    public 
     function update(Request $request)
     {
         if ($this->isPost()) {
@@ -205,7 +205,7 @@ class PaketController extends Controller
              */
             $rules = array(
                 'title' => 'required',
-                'year' => 'required'
+                'startyear' => 'required'
             );
 
             if (null !== $this->validate_v2($request, $rules)) {
@@ -221,12 +221,16 @@ class PaketController extends Controller
                 foreach ($paketModel->getFillable() as $field) {
                     $paket[$field] = $request[$field];
                 }
-
+                $paket['ismultiyears'] = isset($request['ismultiyears']) ? 1 : 0;
+                $paket['yearsofwork'] = ($request['yearsofwork'] == "" || $paket['ismultiyears'] == 0) ? 1 : $request['yearsofwork'];
+                $paket['endyear'] = $paket['startyear'] + $paket['yearsofwork'] - 1;
+                $paket['admin_id'] = Auth::user()->id;
+                // var_dump($paket); exit;
                 $paket->update();
                 $this->response_json->status = true;
                 $this->response_json->message = 'Paket updated.';
             } catch (\Exception $e) {
-                $this->response_json->message = $this->getServerError();
+                $this->response_json->message = $e->getMessage(); //$this->getServerError();
             }
             return $this->__json();
         }

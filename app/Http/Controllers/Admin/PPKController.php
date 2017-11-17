@@ -161,7 +161,8 @@ class PPKController extends Controller
                 $ppk = $ppkModel->find($request['id']);
                 foreach ($ppkModel->getFillable() as $field) {
                     $ppk[$field] = $request[$field];
-                }
+                }   
+                $ppk['year'] = $request['yearupdate'];
                 $ppk['admin_id'] = Auth::user()->id;
                 $ppk->update();
                 $this->response_json->status = true;

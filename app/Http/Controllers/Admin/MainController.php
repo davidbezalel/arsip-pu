@@ -72,6 +72,8 @@ class MainController extends Controller
     /**
      * @todo register admin
      *
+     * File ini harus dihapus jika yang menggunakan sistem adalah admin Satuan Kerja
+     *
      * Validate request body
      * @rules:
      * required

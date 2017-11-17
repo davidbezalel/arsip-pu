@@ -104,7 +104,7 @@ class ReportController extends Controller
                     return $this->__json();
                 }
 
-                if ($_file->getClientOriginalExtension() != 'pdf' && $_file->getClientOriginalExtension() != 'zip' && $_file->getClientOriginalExtension() != 'rar') {
+                if (strtolower($_file->getClientOriginalExtension()) != 'pdf' && strtolower($_file->getClientOriginalExtension()) != 'zip' && strtolower($_file->getClientOriginalExtension()) != 'rar') {
                     $this->response_json->message = 'File must be a .pdf or .zip or .rar file';
                     return $this->__json();
                 }
@@ -125,7 +125,7 @@ class ReportController extends Controller
                 if ($subpaket->reporttype_id == 2) {
                     $_name .= '_' . $subpaket->title;
                 }
-                $_name .= '.' . $_file->getClientOriginalExtension();
+                $_name .= '.' . strtolower($_file->getClientOriginalExtension());
                 $_file->move($_path, $_name);
 
                 $data = array();

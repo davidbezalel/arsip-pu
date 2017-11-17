@@ -21,7 +21,8 @@
 
 <div class="login-box">
     <div class="login-logo">
-        <b>Dinas PU</b> Wilayah I
+        <img width="100px" height="100px" src="/assets/default_img/a.png"> <br>
+        <b>Dinas PU</b> 
     </div>
     <div class="alert nonmodalalert redalert" id="error"></div>
     <div class="login-box-body">
